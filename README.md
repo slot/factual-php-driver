@@ -28,20 +28,19 @@ Results are returned as the JSON returned by Factual but you will likely want to
 
 ## Setup
 
-Add your Factual key and secret to auth.ini, then require the file 'Factual.php'
+Obtain an oauth key and secret from Factual, require the file 'Factual.php with the key and secret as parameters'
     
     //setup
     require_once('Factual.php');
-	$factual = new Factual;
+	$factual = new Factual("yourOauthKey","yourOauthSecret");
 	
 The driver creates an authenticated handle to Factual, and addresses class loading, on instantiation, so be sure to always instantiate a Factual object first.
 
-For simplicity the auth and config files are found in the root dir; these should be moved elsewhere on your production system.
+All of the examples below assume this prior creation of a Factual object.
     
 ## Simple Query Example
 
     // Print 3 random records 
-    $factual = new Factual;
     $query = new Query;
     $query->limit(3);
     $res = $factual->fetch("places", $query);
@@ -50,7 +49,6 @@ For simplicity the auth and config files are found in the root dir; these should
 ## Full Text Search Example
 
     // Print entities that match a full text search for Sushi in Santa Monica:
-    $factual = new Factual;
     $query = new Query;
 	$query->search("Sushi Santa Monica");
     $res = $factual->fetch("places", $query);
@@ -61,7 +59,6 @@ For simplicity the auth and config files are found in the root dir; these should
 You can query Factual for entities located within a geographic area. For example:
 
     // Build a Query that finds entities located within 5000 meters of a latitude, longitude
-    $factual = new Factual;
     $query = new Query;
 	$query->within(new Circle(34.06018, -118.41835, 5000));
     $res = $factual->fetch("places", $query);
@@ -72,7 +69,6 @@ You can query Factual for entities located within a geographic area. For example
 You can have Factual sort your query results for you, on a field by field basis. Simple example:
 
     // Build a Query to find 10 random entities and sort them by name, ascending:
-    $factual = new Factual;
     $query = new Query;
     $query->limit(10);
     $query->sortAsc("name");
@@ -82,7 +78,6 @@ You can have Factual sort your query results for you, on a field by field basis.
 You can specify more than one sort, and the results will be sorted with the first sort as primary, the second sort or secondary, and so on:
 
     // Build a Query to find 20 random entities, sorted ascending primarily by region, then by locality, then by name:
-    $factual = new Factual;
 	$query = new Query;
 	$query->limit(10);
 	$query->sortAsc("region");
@@ -96,7 +91,6 @@ You can specify more than one sort, and the results will be sorted with the firs
 You can use limit and offset to support basic results paging. For example:
 
     // Build a Query with offset of 150, limiting the page size to 10:
-    $factual = new Factual;
     $query = new Query;
 	$query->limit(10);
 	$query->offset(150);
@@ -108,7 +102,6 @@ You can use limit and offset to support basic results paging. For example:
 By default your queries will return all fields in the table. You can use the only modifier to specify the exact set of fields returned. For example:
 
     // Build a Query that only gets the name, tel, and category fields:
-    $factual = new Factual;
 	$query = new Query;
 	$query->limit(10);    
     $query->only("name,tel,category");
@@ -116,7 +109,7 @@ By default your queries will return all fields in the table. You can use the onl
 	print_r($res->getData());    
 
 ## Query Results
-The drivers consume the JSON for you. On the results of factual::fetch() you can work directly with JSON, Arrays, or Objects
+The drivers parse the JSON for you. On the results of factual::fetch() you can work directly with JSON, Arrays, or Objects
  
 	//Get the original JSON
 	$res = $res->getJson();
@@ -187,14 +180,12 @@ The drivers consume the JSON for you. On the results of factual::fetch() you can
 The driver supports various row filter logic. Examples:
 
     // Build a query to find places whose name field starts with "Starbucks"
-    $factual = new Factual;
     $query = new Query;
     $query->field("name")->beginsWith("Starbucks");
     $res = $factual->fetch("places", $query);
 	print_r($res->getData());  
 
     // Build a query to find places with a blank telephone number
-    $factual = new Factual;
     $query = new Query;
     $query->field("tel")->blank();
     $res = $factual->fetch("places", $query);
@@ -290,7 +281,6 @@ The driver supports various row filter logic. Examples:
 Queries support logical AND'ing your row filters. For example:
 
     // Build a query to find entities where the name begins with "Coffee" AND the telephone is blank:
-    $factual = new Factual;
     $query = new Query;
     $query->_and(
     	array(
@@ -304,7 +294,6 @@ Queries support logical AND'ing your row filters. For example:
 Note that all row filters set at the top level of the Query are implicitly AND'ed together, so you could also do this:
 	
     //Combined query alternative syntax
-	$factual = new Factual;
     $query = new Query;
     $query->field("name")->beginsWith("Coffee");
     $query->field("tel")->blank();
@@ -316,7 +305,6 @@ Note that all row filters set at the top level of the Query are implicitly AND'e
 Queries support logical OR'ing your row filters. For example:
 
     // Build a query to find entities where the name begins with "Coffee" OR the telephone is blank:
-    $factual = new Factual;
     $query = new Query;
     $query->_or(array(
        	$query->criteria("name")->beginsWith("Coffee"),
@@ -334,7 +322,6 @@ You can nest AND and OR logic to whatever level of complexity you need. For exam
     // (name begins with "Starbucks") OR (name begins with "Coffee")
     // OR
     // (name full text search matches on "tea" AND tel is not blank)
-    $factual = new Factual;
     $query = new Query;    
     $query->_or(array(
         $query->_or(array(
@@ -361,7 +348,6 @@ The driver fully support Factual's Crosswalk feature, which lets you "crosswalk"
 ## Simple Crosswalk Example
 
     // Get all Crosswalk data for a specific Places entity, using its Factual ID:
-    $factual = new Factual;
 	$query = new CrosswalkQuery();
 	$query->factualId("97598010-433f-4946-8fd5-4a6dd1639d77");	 
 	$res = $factual->fetch("places", $query);
@@ -410,7 +396,6 @@ NOTE: although these parameters are individually optional, at least one of the f
 ## More Crosswalk Examples
 
     // Get Loopt's Crosswalk data for a specific Places entity, using its Factual ID as input:
-	$factual = new Factual;
 	$query = new CrosswalkQuery();
 	$query->factualId("97598010-433f-4946-8fd5-4a6dd1639d77");
 	$query->only("loopt");
@@ -418,7 +403,6 @@ NOTE: although these parameters are individually optional, at least one of the f
 	print_r($res->getData());
 	        
     // Get all Crosswalk data for a specific Places entity using its Foursquare ID as input:
-	$factual = new Factual;
 	$query = new CrosswalkQuery();
 	$query->_namespace("foursquare");
 	$query->namespaceId("4ae4df6df964a520019f21e3");	
@@ -440,7 +424,6 @@ For any Resolve query, there will be 0 or 1 entities returned with <tt>"resolved
 Use the common query structure to add known attributes to the query:
 
     // Get all entities that are possibly a match
-	$factual = new Factual;
 	$query = new ResolveQuery();
 	$query->add("name", "Buena Vista Cigar Club");
 	$query->add("latitude", 34.06);
@@ -458,7 +441,6 @@ And then use methods on the result object to determine resolution:
 Alternatively use the shortcut to return the resolved entity OR null if no resolution:
 	
 	//Resolve and return
-	$factual = new Factual;
 	$tableName = "places";
 	$vars = array(
 		"name"=>"Buena Vista Cigar Club",
@@ -471,9 +453,7 @@ Alternatively use the shortcut to return the resolved entity OR null if no resol
 #Schema
 The schema endpoint returns table metadata:    
   
-	$factual = new Factual;
-	$tableName = "places";
-	$res = $factual->schema($tableName);
+	$res = $factual->schema("places");
 	print_r($res->getColumnSchemas());
 
 # Exception Handling
@@ -483,8 +463,7 @@ If Factual's API indicates an error, a <tt>FactualApiException</tt> unchecked Ex
 Here is an example of catching a <tt>FactualApiException</tt> and inspecting it:
 
 	try{
-		$factual = new Factual;
-    	$query->field("badFieldName")->notIn("Los Angeles");
+    	$query->field("badFieldName")->notIn("Los Angeles"); //this line borks 
     	$res = $factual->fetch("places", $query);
     } catch (FactualApiException $e) {
       	echo "URL:\t" . $e->getRequestUrl()."\n\n";
@@ -501,13 +480,11 @@ Factual does not provide a geocoding service, but we've integrated a third-party
 
 These methods are experimental and unsupported, but (we hope) helpful:
 
-	//geocode
-	$factual = new Factual;
+	//geocode (convert an address to longitude and latitude)
 	$res = $factual->geocode("425 Sherman Ave, Palo Alto, CA, USA");
 	print_r($res);
 
-	//reverse geocode
-	$factual = new Factual;
+	//reverse geocode  (convert a longitude and latitude to an address)
 	$lon = -122.143895;
 	$lat = 37.425674;
 	$res = $factual->reverseGeocode($lon,$lat);

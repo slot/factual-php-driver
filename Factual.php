@@ -20,24 +20,23 @@ require_once('oauth-php/library/OAuthRequester.php');
  */
 class Factual {
 	
-  const DRIVER_HEADER_TAG = "factual-php-driver-v0.1.0"; //help me help you. Help Me, help You.
+  const DRIVER_HEADER_TAG = "factual-php-driver-v0.1.0"; //Custom header
   private $factHome; //string assigned from config
   private $signer; //OAuthStore object
   private $config; //array from config.ini file on construct
   private $geocoder; //geocoder object (unsupported, experimental)
-  const CONFIGPATH = ""; //where the config file is found
-  const AUTHPATH = ""; //where the auth file is found
+  const CONFIGPATH = "config.ini"; //where the config file is found: path + file
 
   /**
    * Constructor. Creates authenticated access to Factual.
-   * @param key your oauth key.
-   * @param secret your oauth secret.
+   * @param string key your oauth key.
+   * @param string secret your oauth secret.
    */
-  public function __construct() {
+  public function __construct($key,$secret) {
   	$this->loadConfig(); //get deets from files
     $this->factHome = $this->config['factual']['endpoint']; //assign endpoint
     //authentication
-    $options = array('consumer_key' => $this->config['auth']['key'], 'consumer_secret' => $this->config['auth']['secret'] );
+    $options = array('consumer_key' => $key, 'consumer_secret' => $secret);
 	$this->signer = OAuthStore::instance("2Leg", $options );
   }
 
@@ -47,10 +46,7 @@ class Factual {
  	 */
  	protected function loadConfig(){
  		if (!$this->config){
- 			$this->config = parse_ini_file(self::CONFIGPATH."config.ini",true);
- 			$auth =  parse_ini_file(self::AUTHPATH."auth.ini");	
- 			$this->config['auth']['key'] = $auth['key'];
- 			$this->config['auth']['secret'] = $auth['secret'];
+ 			$this->config = parse_ini_file(self::CONFIGPATH,true);
  		}
  	}
  
