@@ -20,7 +20,7 @@ require_once('oauth-php/library/OAuthRequester.php');
  */
 class Factual {
 	
-  const DRIVER_HEADER_TAG = "factual-php-driver-v0.1.0"; //Custom header
+  const DRIVER_HEADER_TAG = "factual-php-driver-v1.0.0"; //Custom header
   private $factHome; //string assigned from config
   private $signer; //OAuthStore object
   private $config; //array from config.ini file on construct
