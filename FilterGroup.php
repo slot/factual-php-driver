@@ -58,13 +58,6 @@ class FilterGroup implements Filter {
 	 * @return string
 	 */
 	private function logicJsonStr() {
-
-		/*
-		print_r("\n*here*\n");
-		print_r($this->filters);
-		exit;
-		*/
-
 		$logics = array ();
 		foreach ($this->filters as $filter) {
 			$logics[] = $filter->toJsonStr();
