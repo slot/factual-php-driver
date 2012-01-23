@@ -28,13 +28,15 @@ Results are returned as the JSON returned by Factual but you will likely want to
 
 ## Setup
 
-Add your Factual key and secret to config.ini, then require the file 'Factual.php'
+Add your Factual key and secret to auth.ini, then require the file 'Factual.php'
     
     //setup
     require_once('Factual.php');
 	$factual = new Factual;
 	
 The driver creates an authenticated handle to Factual, and addresses class loading, on instantiation, so be sure to always instantiate a Factual object first.
+
+For simplicity the auth and config files are found in the root dir; these should be moved elsewhere on your production system.
     
 ## Simple Query Example
 
