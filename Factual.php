@@ -25,6 +25,8 @@ class Factual {
   private $signer; //OAuthStore object
   private $config; //array from config.ini file on construct
   private $geocoder; //geocoder object (unsupported, experimental)
+  const CONFIGPATH = ""; //where the config file is found
+  const AUTHPATH = ""; //where the auth file is found
 
   /**
    * Constructor. Creates authenticated access to Factual.
@@ -32,10 +34,10 @@ class Factual {
    * @param secret your oauth secret.
    */
   public function __construct() {
-  	$this->loadConfig(); //get deets from file
+  	$this->loadConfig(); //get deets from files
     $this->factHome = $this->config['factual']['endpoint']; //assign endpoint
     //authentication
-    $options = array('consumer_key' => $this->config['factual']['key'], 'consumer_secret' => $this->config['factual']['secret'] );
+    $options = array('consumer_key' => $this->config['auth']['key'], 'consumer_secret' => $this->config['auth']['secret'] );
 	$this->signer = OAuthStore::instance("2Leg", $options );
   }
 
@@ -45,7 +47,10 @@ class Factual {
  	 */
  	protected function loadConfig(){
  		if (!$this->config){
- 			$this->config = parse_ini_file('config.ini',true); 		
+ 			$this->config = parse_ini_file(self::CONFIGPATH."config.ini",true);
+ 			$auth =  parse_ini_file(self::AUTHPATH."auth.ini");	
+ 			$this->config['auth']['key'] = $auth['key'];
+ 			$this->config['auth']['secret'] = $auth['secret'];
  		}
  	}
  
