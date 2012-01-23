@@ -3,12 +3,12 @@
 This is the Factual-supported PHP driver for [Factual's public API](http://developer.factual.com).
 
 This API supports queries to Factual's Read, Schema, Crosswalk, and Resolve APIs. Full documentation is available on the Factual website:
-* [Read](http://developer.factual.com/display/docs/Factual+Developer+APIs+Version+3): Search the data
-* [Schema](http://developer.factual.com/display/docs/Core+API+-+Schema): Get table metadata
-* [Crosswalk](http://developer.factual.com/display/docs/Places+API+-+Crosswalk): Get third-party IDs
-* [Resolve](http://developer.factual.com/display/docs/Places+API+-+Resolve): Enrich your data and match it against Factual's
+*   [Read](http://developer.factual.com/display/docs/Factual+Developer+APIs+Version+3): Search the data
+*   [Schema](http://developer.factual.com/display/docs/Core+API+-+Schema): Get table metadata
+*   [Crosswalk](http://developer.factual.com/display/docs/Places+API+-+Crosswalk): Get third-party IDs
+*   [Resolve](http://developer.factual.com/display/docs/Places+API+-+Resolve): Enrich your data and match it against Factual's
 
-This driver is supported via the [Factual Deverloper Group](https://groups.google.com/group/factual_developers)
+This driver is supported via the [Factual Developer Group](https://groups.google.com/group/factual_developers)
 
 # Dependencies
 PHP5 is required. The php5-curl module is required.
@@ -249,7 +249,7 @@ The driver supports various row filter logic. Examples:
   <tr>
     <td>notBeginsWithAny</td>
     <td>does not begin with any of</td>
-    <td><tt>$query->field("name")->notBeginsWithAny("star,coffee,tull")</tt> or $query->field("name")->notBeginsWithAny(array("star", "coffee", "tull"))</td>
+    <td><tt>$query->field("name")->notBeginsWithAny("star,coffee,tull")</tt> or <tt>$query->field("name")->notBeginsWithAny(array("star", "coffee", "tull"))</tt></td>
   </tr>
   <tr>
     <td>blank</td>
@@ -300,6 +300,8 @@ Queries support logical AND'ing your row filters. For example:
 	print_r($res->getData());
     
 Note that all row filters set at the top level of the Query are implicitly AND'ed together, so you could also do this:
+	
+    //Combined query alternative syntax
 	$factual = new Factual;
     $query = new Query;
     $query->field("name")->beginsWith("Coffee");
@@ -383,7 +385,7 @@ The driver fully support Factual's Crosswalk feature, which lets you "crosswalk"
   </tr>
   <tr>
     <td>namespace</td>
-    <td>The namespace to search for a third party ID within. A list of <b>currently supported</b> services is <a href="http://developer.factual.com/display/docs/Places+API+-+Supported+Crosswalk+Services">here</a>.</td>
+    <td>The namespace to search for a third party ID within. See the [list of currently supported third-party crosswalked services](http://developer.factual.com/display/docs/Places+API+-+Supported+Crosswalk+Services).</td>
     <td><tt>$query->namespace("foursquare")</tt></td>
   </tr>
   <tr>
@@ -508,10 +510,3 @@ These methods are experimental and unsupported:
 	$lat = 37.425674;
 	$res = $factual->reverseGeocode($lon,$lat);
 	print_r($res);	
-
-# More Examples
-
-For more code examples:
-
-* See the standalone demos in <tt>test/factual/demo</tt>
-* See the integration tests in <tt>test/factual/FactualTest.java</tt>
