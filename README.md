@@ -3,6 +3,7 @@
 This is the Factual-supported PHP driver for [Factual's public API](http://developer.factual.com).
 
 This API supports queries to Factual's Read, Schema, Crosswalk, and Resolve APIs. Full documentation is available on the Factual website:
+
 *   [Read](http://developer.factual.com/display/docs/Factual+Developer+APIs+Version+3): Search the data
 *   [Schema](http://developer.factual.com/display/docs/Core+API+-+Schema): Get table metadata
 *   [Crosswalk](http://developer.factual.com/display/docs/Places+API+-+Crosswalk): Get third-party IDs
@@ -27,8 +28,7 @@ Results are returned as the JSON returned by Factual but you will likely want to
 
 ## Setup
 
-1. Add your Factual key and secret to config.ini
-1. Require the file 'Factual.php'
+Add your Factual key and secret to config.ini, then require the file 'Factual.php'
     
     //setup
     require_once('Factual.php');
@@ -354,7 +354,7 @@ You can nest AND and OR logic to whatever level of complexity you need. For exam
 
 The driver fully support Factual's Crosswalk feature, which lets you "crosswalk" the web and relate entities between Factual's data and that of other web authorities.
 
-(See [the Crosswalk Blog](http://blog.factual.com/crosswalk-api) for more background.)
+(See [the Crosswalk Blog](http://blog.factual.com/crosswalk-api) for context.)
 
 ## Simple Crosswalk Example
 
@@ -435,7 +435,7 @@ For any Resolve query, there will be 0 or 1 entities returned with <tt>"resolved
 
 ## Simple Resolve Examples
 
-Use a very similar query structure to add known attributes to the query:
+Use the common query structure to add known attributes to the query:
 
     // Get all entities that are possibly a match
 	$factual = new Factual;
@@ -453,7 +453,7 @@ And then use methods on the result object to determine resolution:
     //If so, get it:
     $resolved = $res->getResolved();
     
-Alternatively use the short cut (experimental) to return the resolved entity OR null if no resolution:
+Alternatively use the shortcut to return the resolved entity OR null if no resolution:
 	
 	//Resolve and return
 	$factual = new Factual;
@@ -497,7 +497,7 @@ Here is an example of catching a <tt>FactualApiException</tt> and inspecting it:
 # Geocoding
 Factual does not provide a geocoding service, but we've integrated a third-party Web Service that can easily be swapped out.  
 
-These methods are experimental and unsupported:
+These methods are experimental and unsupported, but (we hope) helpful:
 
 	//geocode
 	$factual = new Factual;
