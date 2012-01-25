@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Requires PHP5, php5-curl
+ * Requires PHP5, php5-curl, SPL (for autoloading)
  */
 
 
@@ -20,7 +20,7 @@ require_once('oauth-php/library/OAuthRequester.php');
  */
 class Factual {
 	
-  const DRIVER_HEADER_TAG = "factual-php-driver-v1.0.0"; //Custom header
+  const DRIVER_HEADER_TAG = "factual-php-driver-v1.0.1"; //Custom header
   private $factHome; //string assigned from config
   private $signer; //OAuthStore object
   private $config; //array from config.ini file on construct
@@ -33,11 +33,14 @@ class Factual {
    * @param string secret your oauth secret.
    */
   public function __construct($key,$secret) {
-  	$this->loadConfig(); //get deets from files
+  	//load configuration
+  	$this->loadConfig();
     $this->factHome = $this->config['factual']['endpoint']; //assign endpoint
-    //authentication
+    //create authentication object
     $options = array('consumer_key' => $key, 'consumer_secret' => $secret);
 	$this->signer = OAuthStore::instance("2Leg", $options );
+	//register autoloader
+	spl_autoload_register("self::factualAutoload", true);
   }
 
  	/**
@@ -203,11 +206,16 @@ class Factual {
   	return $this->geocoder;
   }
   
-}
-
-  //extra-class autoloader
-  function __autoload($className) {
+  /**
+   * Autoloader for file dependencies
+   * Called by spl_autoload_register() to avoid conflicts with autoload() methods from other libs
+   */
+  private function factualAutoload($className) {
     include dirname(__FILE__)."/".$className . ".php";
   }
+  
+}
+
+
   
 ?>

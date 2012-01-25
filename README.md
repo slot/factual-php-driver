@@ -12,7 +12,7 @@ This API supports queries to Factual's Read, Schema, Crosswalk, and Resolve APIs
 This driver is supported via the [Factual Developer Group](https://groups.google.com/group/factual_developers)
 
 # Dependencies
-PHP5 is required. The php5-curl module is required.
+PHP5 is required. The php5-curl module is required. SPL is required (for autoloading).
 
 The package includes [Google's oauth libraries](http://code.google.com/p/oauth-php/)
 
@@ -489,3 +489,9 @@ These methods are experimental and unsupported, but (we hope) helpful:
 	$lat = 37.425674;
 	$res = $factual->reverseGeocode($lon,$lat);
 	print_r($res);	
+
+# Notes and Miscellany
+
+##Autoloading
+the __autoload() method is deprecated, so this library uses spl_autoload_register(), not least to avoid conflicts with _autoload() methods from other libs.   
+SPL must be enabled (not sure? Use <tt>php</tt> -i' on the command line.).  If you cannot enable SPL, move factual::factualAutoload() out of the class and rename it '__autoload()'.
