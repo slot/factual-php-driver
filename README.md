@@ -26,6 +26,11 @@ Queries are created using the Query class, which provides a fluent interface to 
 
 Results are returned as the JSON returned by Factual but you will likely want to employ the JSON parsing conveniences built into the driver.
 
+## Tables
+The wrapper supports all tables in the Factual v3 API
+- Use table <tt>global</tt> for international places
+- Use table <tt>places</tt> for US places only
+
 ## Setup
 
 Obtain an oauth key and secret from Factual, require the file 'Factual.php with the key and secret as parameters'
