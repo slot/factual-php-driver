@@ -399,6 +399,10 @@ class FactualTest {
 	}
 
 	public function __construct($key, $secret) {
+		if (!$key || !$secret){
+			$this->msg("Key and secret are required in class constructor",null);
+			exit;
+		}
 		$this->factual = new factual($key, $secret);
 	}
 
