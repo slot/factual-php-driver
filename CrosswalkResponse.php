@@ -8,13 +8,14 @@
  */
 class CrosswalkResponse extends FactualResponse {
 
- /**
+ /*
   * Results as array of objects
   * @return array Array of objects
-  */
+  
 	public function getObjects(){
 		return parent::asObjects("Crosswalk");
 	}
+*/	
 }
 
 ?>

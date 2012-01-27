@@ -30,10 +30,10 @@ class ResolveResponse extends ReadResponse {
 		}
 	}
 
-	/**
+	/*
 	 * Gets resolved entity as object (experimental)
 	 * @return array | false on no resolution
-	 */
+	 
 	public function getResolvedAsObject() {
 		if ($this->isResolved() && $this->entityType) {
 			$objectType = $this->entityType;
@@ -42,6 +42,7 @@ class ResolveResponse extends ReadResponse {
 			return null;
 		}
 	}
+*/
 
 }
 ?>
