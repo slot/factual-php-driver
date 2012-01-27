@@ -295,6 +295,10 @@ class FactualTest {
 		$this->testConnect();
 		$this->testQueryFilterLimitSort();
 		$this->testMultiFilter();
+		$this->testGeoSearch();
+		$this->testMultiCountry();
+		$this->testGeocode();
+		$this->testReverseGeocode();
 		$this->testResolve();
 		$this->testCrosswalk();
 		$this->testSchema();
@@ -313,6 +317,63 @@ class FactualTest {
 		$this->writeToFile = $fileName;
 	}
 
+
+	private function testMultiCountry(){
+	 	$requestSample = 10;
+	 	$query = new FactualQuery;
+		$query->search("Sushi");
+		$query->field("country")->in("US,CA");
+		$query->limit($requestSample);
+	    $res = $this->factual->fetch($this->testTables['global'], $query);
+		if ($res->size() !== $requestSample){
+			$this->msg("Multi Country Search", false);
+		} else {
+			$this->msg("Multi Country Search", true);
+		}
+	}
+
+
+	private function testGeocode(){
+		$res = $this->factual->geocode("425 Sherman Ave, Palo Alto, CA, USA");
+		if ($res['latitude'] == 37.425674 && $res['longitude'] == -122.143895){
+			$this->msg("Geocoder", true);
+		} else {
+			$this->msg("Geocoder", false);
+		}
+	}
+
+	private function testReverseGeocode(){
+		$lon = -122.143895;
+		$lat = 37.425674;
+		$res = $this->factual->reverseGeocode($lon,$lat);
+		if ($res['house'] == 425 && $res['street'] == "Sherman Ave"){
+			$this->msg("Reverse Geocoder", true);
+		} else {
+			$this->msg("Reverse Geocoder", false);
+		}
+	}
+
+/*
+	private function testPlaceObjects(){
+		$query = new FactualQuery();
+		$query->limit(1);
+		$res = $this->factual->fetch($this->testTables['global'], $query); 
+		$places = $res->
+	}
+*/
+	private function testGeoSearch(){
+		$requestSample = 3;
+		$query = new FactualQuery();
+		$query->within(new FactualCircle(34.06018, -118.41835, 5000));
+		$query->limit($requestSample); //only get ten results
+		$query->sortAsc("\$distance"); //order results by distance
+		$res = $this->factual->fetch($this->testTables['global'], $query);
+		if ($res->size() !== $requestSample){
+			$this->msg("Geo Search", false);
+		} else {
+			$this->msg("Geo Search", true);
+		}
+	}
 
 	private function testCountries(){
 		$requestSample = 3;
