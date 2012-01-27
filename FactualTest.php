@@ -297,6 +297,7 @@ class FactualTest {
 		$this->testMultiFilter();
 		$this->testGeoSearch();
 		$this->testMultiCountry();
+		$this->testResponseMetadata();
 		$this->testGeocode();
 		$this->testReverseGeocode();
 		$this->testResolve();
@@ -315,6 +316,43 @@ class FactualTest {
 	 */
 	public function setLogFile($fileName = null) {
 		$this->writeToFile = $fileName;
+	}
+
+
+	private function testResponseMetadata(){
+		$requestSample = 1;
+	 	$query = new FactualQuery;
+		$query->search("Sushi");
+		$query->limit($requestSample);
+	    $res = $this->factual->fetch($this->testTables['global'], $query);
+		
+		// Get URL request string
+		if (strlen($res->getRequest()) > 5){
+			$this->msg("Response URL", true);
+		} else {
+			$this->msg("Response URL", false);
+		}
+	
+		// Get the table name queried
+		if ($res->getTable() == $this->testTables['global']){
+			$this->msg("Request Table Name", true);
+		} else {
+			$this->msg("Request Table Name", false);
+		}
+		
+		// Get http headers returned by Factual
+		if (count($res->getHeaders()) > 2){
+			$this->msg("Response Headers", true);
+		} else {
+			$this->msg("Response Headers", false);
+		}
+	
+		// Get http status code returned by Factual	
+		if ($res->getCode() > 0){
+			$this->msg("Response Code", true);
+		} else {
+			$this->msg("Response Code", false);
+		}	
 	}
 
 
