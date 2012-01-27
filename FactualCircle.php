@@ -7,7 +7,7 @@
  * @package Factual
  * @license Apache 2.0
  */
-class Circle {
+class FactualCircle {
 	private $lat;
 	private $lon;
 	private $meters;

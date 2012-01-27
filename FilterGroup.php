@@ -8,7 +8,7 @@
  * @package Factual
  * @license Apache 2.0
  */
-class FilterGroup implements Filter {
+class FilterGroup implements FactualFilter {
 	private $filters = array (); //array
 	private $op = "\$and"; //string
 

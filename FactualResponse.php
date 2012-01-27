@@ -6,10 +6,8 @@
  * @package Factual
  * @license Apache 2.0
  */
-abstract class Response {
-	/**
-	 * Array of entities as objects
-	 */
+abstract class FactualResponse {
+
   protected $objects = array(); 
   protected $version = null; //string
   protected $status = null; //string
@@ -18,15 +16,59 @@ abstract class Response {
   protected $data = array();
   protected $json;
   protected $countTotal = null;
+  protected $responseHeaders = array();
+  protected $responseCode = null;
+  protected $request = null;
 
   /**
-   * Constructor, parses from a JSON response String.
-   * @param string json The JSON response String returned by Factual.
+   * Constructor, parses return values from CURL in factual::request() 
+   * @param array response The JSON response String returned by Factual.
    */
-  public function __construct($json) {
-    $this->json = $json;
+  public function __construct($apiResponse) {
     try {
-    	//assign data value
+    	$this->json = $apiResponse['body'];
+    	$this->parseResponse($apiResponse);
+    } catch (Exception $e) {
+    	//add note about json encoding borking here
+      throw $e;
+    }
+  }
+
+	/**
+	 * Parses response from CURL
+	 * @param array apiResponse response from curl
+	 * @return void
+	 */
+	protected function parseResponse($apiResponse){
+		$this->parseJSON($apiResponse['body']);
+		$this->responseHeaders = $apiResponse['headers'];
+		$this->responseCode = $apiResponse['code'];
+		$this->request = $apiResponse['request'];
+	}
+
+	/**
+	 * Get response headers
+	 * @return array
+	 */
+	public function getResponseHeaders(){
+		return $this->responseHeaders;
+	}
+
+	/**
+	 * Get response code
+	 * @return int
+	 */
+	public function getResponseCode(){
+		return $this->responseCode;
+	}
+
+	/**
+	 * Parses JSON as array and assigns object values
+	 * @param string json JSON returned from API
+	 * @return array structured JSON
+	 */
+	protected function parseJSON($json){
+		//assign data value
     	$rootJSON = json_decode($json,true);
     	$this->data = $rootJSON['response']['data'];
     	//assign status value
@@ -40,11 +82,8 @@ abstract class Response {
     	if(isset($rootJSON['response']['included_rows'])){
     		$this->includedRows = $rootJSON['response']['included_rows'];
     	}    	
-    } catch (Exception $e) {
-    	//add note about json encoding borking here
-      throw $e;
-    }
-  }
+    	return $rootJSON;	
+	}
 
   /**
    * @return The full JSON response from Factual
@@ -133,6 +172,15 @@ abstract class Response {
    */
   public function toString() {
     return $this->getJson();
+  }
+  
+  
+  /**
+   * Returns request URL, for debugging
+   * @return string
+   */
+  public function getRequest(){
+  	return $this->request;
   }
   
    /**

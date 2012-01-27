@@ -148,6 +148,7 @@ class Geocoder {
 		unset ($aVarComb);
 		$endPoint = $this->endPoint . "?q=" . urlencode($qString) . "&" . $sData;
 		$this->webserviceWait(); //pause as required before calling webservice again
+		$http_response_header = array();
 		@ $result = file_get_contents($endPoint);
 		if (!$result) {
 			throw new Exception(" YQL Error on " . $qString . ": " . $http_response_header[0]);

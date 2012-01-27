@@ -6,7 +6,7 @@
  * @package Factual
  * @license Apache 2.0
  */
-class CrosswalkResponse extends Response {
+class CrosswalkResponse extends FactualResponse {
 
  /**
   * Results as array of objects

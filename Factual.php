@@ -20,7 +20,7 @@ require_once('oauth-php/library/OAuthRequester.php');
  */
 class Factual {
 	
-  const DRIVER_HEADER_TAG = "factual-php-driver-v1.0.1"; //Custom header
+  const DRIVER_HEADER_TAG = "factual-php-driver-v1.1.0"; //Custom header
   private $factHome; //string assigned from config
   private $signer; //OAuthStore object
   private $config; //array from config.ini file on construct
@@ -82,7 +82,7 @@ class Factual {
    */
   public function fetch($tableName, $query) {
   	switch (get_class($query)) {
-    case "Query":
+    case "FactualQuery":
     	$res = new ReadResponse($this->request($this->urlForFetch($tableName, $query)));
     	$this->setEntityType($tableName, $res);
         return $res;
@@ -95,6 +95,9 @@ class Factual {
     	$this->setEntityType($tableName, $res);
         return $res;        
         break;
+    default:
+    	throw new Exception(__METHOD__." class type '".get_class($query)."' not recognized");
+    	return false;
 	} 
   }
   
@@ -157,14 +160,14 @@ class Factual {
   private function request($urlStr) {
 	$requestMethod = "GET";
 	$params = null;
-	$customHeaders[CURLOPT_HTTPHEADER] = array("X-Factual-Lib: ".self::DRIVER_HEADER_TAG); //crfeate custom header
+	$customHeaders[CURLOPT_HTTPHEADER] = array("X-Factual-Lib: ".self::DRIVER_HEADER_TAG); //custom header
     // Build request with OAuth request params
     $request = new OAuthRequester($urlStr, $requestMethod, $params);
  	//Make request
     try {
     	$result = $request->doRequest(0,$customHeaders);
-    	$response = $result['body']; //employ only body string from here on in
-    	return $response;
+    	$result['request'] = $urlStr; //pass request string onto response
+    	return $result;
 	} catch(Exception $e) {
 		$factualE = new FactualApiException($e);
 		$factualE->requestMethod($requestMethod);	
@@ -201,7 +204,7 @@ class Factual {
 	*/
   private function getGeocoder(){
   	if (!$this->geocoder){
-  		$this->geocoder = new Geocoder;
+  		$this->geocoder = new GeocoderWrapper;
   	}
   	return $this->geocoder;
   }
@@ -210,8 +213,8 @@ class Factual {
    * Autoloader for file dependencies
    * Called by spl_autoload_register() to avoid conflicts with autoload() methods from other libs
    */
-  private function factualAutoload($className) {
-    include dirname(__FILE__)."/".$className . ".php";
+  public function factualAutoload($className) {
+  		include dirname(__FILE__)."/".$className . ".php";
   }
   
 }

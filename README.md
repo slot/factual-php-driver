@@ -41,7 +41,7 @@ All of the examples below assume this prior creation of a Factual object.
 ## Simple Query Example
 
     // Print 3 random records 
-    $query = new Query;
+    $query = new FactualQuery;
     $query->limit(3);
     $res = $factual->fetch("places", $query);
 	print_r($res->getData());
@@ -49,7 +49,7 @@ All of the examples below assume this prior creation of a Factual object.
 ## Full Text Search Example
 
     // Print entities that match a full text search for Sushi in Santa Monica:
-    $query = new Query;
+    $query = new FactualQuery;
 	$query->search("Sushi Santa Monica");
     $res = $factual->fetch("places", $query);
 	print_r($res->getData());
@@ -59,8 +59,8 @@ All of the examples below assume this prior creation of a Factual object.
 You can query Factual for entities located within a geographic area. For example:
 
     // Build a Query that finds entities located within 5000 meters of a latitude, longitude
-    $query = new Query;
-	$query->within(new Circle(34.06018, -118.41835, 5000));
+    $query = new FactualQuery;
+	$query->within(new FactualCircle(34.06018, -118.41835, 5000));
     $res = $factual->fetch("places", $query);
 	print_r($res->getData());
 
@@ -69,7 +69,7 @@ You can query Factual for entities located within a geographic area. For example
 You can have Factual sort your query results for you, on a field by field basis. Simple example:
 
     // Build a Query to find 10 random entities and sort them by name, ascending:
-    $query = new Query;
+    $query = new FactualQuery;
     $query->limit(10);
     $query->sortAsc("name");
     $res = $factual->fetch("places", $query);
@@ -78,7 +78,7 @@ You can have Factual sort your query results for you, on a field by field basis.
 You can specify more than one sort, and the results will be sorted with the first sort as primary, the second sort or secondary, and so on:
 
     // Build a Query to find 20 random entities, sorted ascending primarily by region, then by locality, then by name:
-	$query = new Query;
+	$query = new FactualQuery;
 	$query->limit(10);
 	$query->sortAsc("region");
 	$query->sortAsc("locality");
@@ -91,7 +91,7 @@ You can specify more than one sort, and the results will be sorted with the firs
 You can use limit and offset to support basic results paging. For example:
 
     // Build a Query with offset of 150, limiting the page size to 10:
-    $query = new Query;
+    $query = new FactualQuery;
 	$query->limit(10);
 	$query->offset(150);
 	$res = $factual->fetch("places", $query);
@@ -102,7 +102,7 @@ You can use limit and offset to support basic results paging. For example:
 By default your queries will return all fields in the table. You can use the only modifier to specify the exact set of fields returned. For example:
 
     // Build a Query that only gets the name, tel, and category fields:
-	$query = new Query;
+	$query = new FactualQuery;
 	$query->limit(10);    
     $query->only("name,tel,category");
 	$res = $factual->fetch("places", $query);
@@ -180,13 +180,13 @@ The drivers parse the JSON for you. On the results of factual::fetch() you can w
 The driver supports various row filter logic. Examples:
 
     // Build a query to find places whose name field starts with "Starbucks"
-    $query = new Query;
+    $query = new FactualQuery;
     $query->field("name")->beginsWith("Starbucks");
     $res = $factual->fetch("places", $query);
 	print_r($res->getData());  
 
     // Build a query to find places with a blank telephone number
-    $query = new Query;
+    $query = new FactualQuery;
     $query->field("tel")->blank();
     $res = $factual->fetch("places", $query);
 	print_r($res->getData());
@@ -281,7 +281,7 @@ The driver supports various row filter logic. Examples:
 Queries support logical AND'ing your row filters. For example:
 
     // Build a query to find entities where the name begins with "Coffee" AND the telephone is blank:
-    $query = new Query;
+    $query = new FactualQuery;
     $query->_and(
     	array(
        		$query->criteria("name")->beginsWith("Coffee"),
@@ -294,7 +294,7 @@ Queries support logical AND'ing your row filters. For example:
 Note that all row filters set at the top level of the Query are implicitly AND'ed together, so you could also do this:
 	
     //Combined query alternative syntax
-    $query = new Query;
+    $query = new FactualQuery;
     $query->field("name")->beginsWith("Coffee");
     $query->field("tel")->blank();
     $res = $factual->fetch("places", $query);
@@ -305,7 +305,7 @@ Note that all row filters set at the top level of the Query are implicitly AND'e
 Queries support logical OR'ing your row filters. For example:
 
     // Build a query to find entities where the name begins with "Coffee" OR the telephone is blank:
-    $query = new Query;
+    $query = new FactualQuery;
     $query->_or(array(
        	$query->criteria("name")->beginsWith("Coffee"),
   	   	$query->criteria("tel")->blank()
@@ -322,7 +322,7 @@ You can nest AND and OR logic to whatever level of complexity you need. For exam
     // (name begins with "Starbucks") OR (name begins with "Coffee")
     // OR
     // (name full text search matches on "tea" AND tel is not blank)
-    $query = new Query;    
+    $query = new FactualQuery;    
     $query->_or(array(
         $query->_or(array(
             $query->field("name")->beginsWith("Starbucks"),
@@ -489,6 +489,9 @@ These methods are experimental and unsupported, but (we hope) helpful:
 	$lat = 37.425674;
 	$res = $factual->reverseGeocode($lon,$lat);
 	print_r($res);	
+
+#Testing
+Add your secret and key to <tt>test.php</tt> and run on the command line: 'php test.php'.  This checks your PHP install and performs a number of ad-hoc unit tests.
 
 # Notes and Miscellany
 

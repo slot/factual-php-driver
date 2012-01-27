@@ -6,7 +6,7 @@
  * @license Apache 2.0
  */
  
-interface Filter {
+interface FactualFilter {
 
   public function toJsonStr();
 

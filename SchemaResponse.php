@@ -8,7 +8,7 @@
  * @package Factual
  * @license Apache 2.0
  */
-class SchemaResponse extends Response {
+class SchemaResponse extends FactualResponse {
 	protected $json; //string
 	private $columnSchemas = array(); //array or ColumnSchema objects
 	private $title; //string
@@ -16,30 +16,28 @@ class SchemaResponse extends Response {
 	private $geoEnabled; //bool
 	private $description; //string
 
+
 	/**
-	 * Constructor, parses from a JSON response String.
-	 * @param json the JSON response String returned by Factual.
+	 * Parses JSON as array and assigns object values
+	 * @param string json JSON returned from API
+	 * @return array structured JSON
 	 */
-	public function __construct($json) {
-		try{
-			$this->json = $json;
-			$rootJSON = json_decode($json,true);
-			$this->title = $rootJSON['response']['view']['title'];
-			$this->description = $rootJSON['response']['view']['description'];
-			$this->makeColumnSchemas($rootJSON['response']['view']['fields']);
-			$this->searchEnabled = (bool)$rootJSON['response']['view']['search_enabled'];
-			$this->geoEnabled = (bool) $rootJSON['response']['view']['geo_enabled'];
-		} catch (Exception $e) {
-		  throw new Exception($e);
-		}
+	protected function parseJSON($json){
+		$rootJSON = parent::parseJSON($json);
+		$this->title = $rootJSON['response']['view']['title'];
+		$this->description = $rootJSON['response']['view']['description'];
+		$this->makeColumnSchemas($rootJSON['response']['view']['fields']);
+		$this->searchEnabled = (bool)$rootJSON['response']['view']['search_enabled'];
+		$this->geoEnabled = (bool)$rootJSON['response']['view']['geo_enabled'];
+		return $rootJSON;
 	}
 
 	/**
 	 * Gets objects describing column schemas
 	 */
-	  private function makeColumnSchemas($fields) {
+	  protected function makeColumnSchemas($fields) {
 	  	foreach ($fields as $column){
-	  		$this->columnSchemas[$column['name']] = new ColumnSchema($column);
+	  		$this->columnSchemas[$column['name']] = new FactualColumnSchema($column);
 	  	}
 	  }
 

@@ -1,6 +1,6 @@
 <?php
 
-class FieldFilter implements Filter {
+class FieldFilter implements FactualFilter {
 	
   private $fieldName; //string
   private $op; //sting

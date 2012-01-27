@@ -8,7 +8,7 @@
  * @license Apache 2.0
 */
 
-class ColumnSchema {
+class FactualColumnSchema {
 	public $name; //string
 	public $description; //string
 	public $faceted; //bool

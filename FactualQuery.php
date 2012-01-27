@@ -11,7 +11,7 @@
  * @license Apache 2.0
  */
 
-class Query {
+class FactualQuery {
 	private $fullTextSearch; //string
 	private $selectFields = null; //otherwise comma-delineated list of fieldnames
 	private $limit; //int

@@ -7,7 +7,7 @@
  * @package Factual
  * @license Apache 2.0
  */
-class Place {
+class FactualPlace {
 	private $factual_id = null; //string
 	private $name = null; //string 
 	private $po_box = null; //string

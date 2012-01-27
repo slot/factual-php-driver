@@ -8,7 +8,7 @@
  * @package Factual
  * @license Apache 2.0
  */
-class ReadResponse extends Response {
+class ReadResponse extends FactualResponse {
 	protected $entityType = null;
 
 	/**
