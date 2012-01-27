@@ -127,14 +127,14 @@ By default your queries will return all fields in the table. You can use the onl
 ## Query Results
 The drivers parse the JSON for you. On the results of factual::fetch() you can work directly with JSON, Arrays, or Objects
  
-	//Get the original JSON
+	//Get the original JSON (includes status and metadata)
 	$res = $res->getJson();
 	
 	//Get the entities as array of arrays
 	$res = $res->getData();
 	
-	//Get the entities as array of objects
-	$res = $res->getObjects();	
+	//Get the entities as a JSON array
+	$res = $res->getDataAsJSON();	
 	
 ## Query Metadata
 To help with debugging, we provide in the response object metadata about the query and the response:
