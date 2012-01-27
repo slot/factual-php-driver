@@ -106,14 +106,12 @@ You can specify more than one sort, and the results will be sorted with the firs
 
 You can use limit and offset to support basic results paging. For example:
 
-<pre lang="php">
     // Build a Query with offset of 150, limiting the page size to 10:
     $query = new FactualQuery;
 	$query->limit(10);
 	$query->offset(150);
 	$res = $factual->fetch("places", $query);
 	print_r($res->getData());	
-</pre>
 	
 ## Field Selection
 
@@ -137,6 +135,21 @@ The drivers parse the JSON for you. On the results of factual::fetch() you can w
 	
 	//Get the entities as array of objects
 	$res = $res->getObjects();	
+	
+## Query Metadata
+To help with debugging, we provide in the response object metadata about the query and the response:
+
+	// Get URL request string
+	return $res->getRequest();
+
+	// Get the table name queried
+	return $res->getTable();
+	
+	// Get http headers returned by Factual
+	return $res->getHeaders();
+
+	// Get http status code returned by Factual
+	return $res->getCode();
 
 # Read API
 ## All Top Level Query Parameters
