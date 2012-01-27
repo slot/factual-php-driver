@@ -27,13 +27,15 @@ Queries are created using the Query class, which provides a fluent interface to 
 Results are returned as the JSON returned by Factual but you will likely want to employ the JSON parsing conveniences built into the driver.
 
 ## Tables
-The wrapper supports all tables in the Factual v3 API
-*   Use table <tt>global</tt> for international places
-*   Use table <tt>places</tt> for US places only
+The Factual API is a generic API that sits over all tables available via the Factual v3 API. Some popular ones:
+
+*   Table <tt>global</tt> for international places
+*   Table <tt>places</tt> for US places only
+*   Table <tt>places</tt> for US places only
 
 ## Setup
 
-Obtain an oauth key and secret from Factual, require the file 'Factual.php with the key and secret as parameters'
+Obtain an oauth key and secret from Factual, require the file 'Factual.php, and instantiate a <tt>factual</tt> object with the key and secret as parameters'
     
     //setup
     require_once('Factual.php');
@@ -45,7 +47,7 @@ All of the examples below assume this prior creation of a Factual object.
     
 ## Simple Query Example
 
-    // Print 3 random records 
+    // Find 3 random records 
     $query = new FactualQuery;
     $query->limit(3);
     $res = $factual->fetch("places", $query);
@@ -53,7 +55,7 @@ All of the examples below assume this prior creation of a Factual object.
 	
 ## Full Text Search Example
 
-    // Print entities that match a full text search for Sushi in Santa Monica:
+    // Find entities that match a full text search for Sushi in Santa Monica:
     $query = new FactualQuery;
 	$query->search("Sushi Santa Monica");
     $res = $factual->fetch("places", $query);
@@ -63,10 +65,19 @@ All of the examples below assume this prior creation of a Factual object.
 
 You can query Factual for entities located within a geographic area. For example:
 
-    // Build a Query that finds entities located within 5000 meters of a latitude, longitude
+    // Find entities located within 5000 meters of a latitude, longitude
     $query = new FactualQuery;
 	$query->within(new FactualCircle(34.06018, -118.41835, 5000));
     $res = $factual->fetch("places", $query);
+	print_r($res->getData());
+
+The above example queries only our US data (our 'places' table).  Be sure to use our 'global' table when querying international or multiple countries.
+
+    // Search for 'sushi' in the US and Canada
+ 	$query = new FactualQuery;
+	$query->search("Sushi");
+	$query->field("country")->in("US,CA");
+    $res = $factual->fetch("global", $query);
 	print_r($res->getData());
 
 ## Results sorting
@@ -95,12 +106,14 @@ You can specify more than one sort, and the results will be sorted with the firs
 
 You can use limit and offset to support basic results paging. For example:
 
+<pre lang="php">
     // Build a Query with offset of 150, limiting the page size to 10:
     $query = new FactualQuery;
 	$query->limit(10);
 	$query->offset(150);
 	$res = $factual->fetch("places", $query);
 	print_r($res->getData());	
+</pre>
 	
 ## Field Selection
 
