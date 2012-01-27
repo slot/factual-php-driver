@@ -30,7 +30,7 @@ abstract class FactualResponse {
     	$this->parseResponse($apiResponse);
     } catch (Exception $e) {
     	//add note about json encoding borking here
-      throw $e;
+      throw $e ();
     }
   }
 
@@ -47,7 +47,7 @@ abstract class FactualResponse {
 	}
 
 	/**
-	 * Get response headers
+	 * Get response headers sent by Factual
 	 * @return array
 	 */
 	public function getResponseHeaders(){
@@ -55,7 +55,7 @@ abstract class FactualResponse {
 	}
 
 	/**
-	 * Get response code
+	 * Get HTTP response code
 	 * @return int
 	 */
 	public function getResponseCode(){
@@ -86,59 +86,72 @@ abstract class FactualResponse {
 	}
 
   /**
-   * @return The full JSON response from Factual
+   * Get the entire JSON response from Factual
+   * @return string 
    */
   public function getJson() {
     return $this->json;
   }
 
   /**
-   * The status returned by the Factual API server, e.g. "ok".
-   * @return status returned by the Factual API server.
+   * Get the status returned by the Factual API server, e.g. "ok".
+   * @return string
    */
   public function getStatus() {
     return $this->status;
   }
 
   /**
-   * The version tag returned by the Factual API server, e.g. "3".
-   * @return the version tag returned by the Factual API server.
+   * Get the version returned by the Factual API server, e.g. "3".
+   * @return numeric
    */
   public function getVersion() {
     return $this->version;
   }
 
   /**
-   * @return total underlying row count, or {@link #UNDEFINED} if unknown.
+   * Get count of all entities meeting query criteria, or null if unknown.
+   * @return int | null
    */
   public function getTotalRowCount() {
     return $this->totalRowCount;
   }
 
   /**
-   * @return int Count of result rows returned in this response.
+   * Get count of result rows returned in this response.
+   * @return int 
    */
   public function getIncludedRowCount() {
     return $this->includedRows;
   }
 
   /**
-   * An array of data returned by Factual. 
-   * @return the main data returned by Factual.
+   * Get the returned entities as an array 
+   * @return array
    */
   public function getData() {
     return $this->data;
   }
 
   /**
-   * @return int Count of elements of the result set
+   * Get the return entities as JSON 
+   * @return the main data returned by Factual.
+   */
+  public function getDataAsJSON() {
+    	return json_encode($this->data);
+  }
+
+  /**
+   * Gets count of elements returned in this page of result set (not total count)
+   * @return int 
    */
   public function size() {
 	return $this->includedRows;  
   }
 
   /**
-   * @return array The first data record or null if no data was returned.
+   * Get the first data record or, null if no data was returned.
+   * @return array 
    */
   public function first() {
     if(empty($this->data)) {
@@ -149,34 +162,33 @@ abstract class FactualResponse {
   }
 
   /**
-   * Total result count, if specifically requested by Query::includeRowCount()
-   * @return int (Null == not requested)
+   * Get total result count. Must be specifically requested via Query::includeRowCount()
+   * @return int | null
    */
   public function getRowCount() {
     return $this->countTotal;
   }
 
   /**
-   * @return true if Factual's response did not include any results records for
-   *         the query, false otherwise.
+   * Checks whether data was returned by Factual server.  True if Factual's 
+   * response did not include any results records for the query, false otherwise.
+   * @return bool
    */
   public function isEmpty() {
     return $this->includedRows == 0;
   }
 
   /**
-   * Subclasses of Response must provide access to the original JSON
-   * representation of Factual's response.
-   * 
-   * @return the original JSON representation of Factual's response.
+   * Subclasses of FactualResponse must provide access to the original JSON
+   * representation of Factual's response. Alias for getJson()
+   * @return string
    */
   public function toString() {
     return $this->getJson();
   }
   
-  
   /**
-   * Returns request URL, for debugging
+   * Get URL request string, does not include auth
    * @return string
    */
   public function getRequest(){
