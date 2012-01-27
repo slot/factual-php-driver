@@ -15,10 +15,14 @@ abstract class FactualResponse {
   protected $includedRows = null; //int
   protected $data = array();
   protected $json;
+  protected $tableName = null; //table getting queried
   protected $countTotal = null;
   protected $responseHeaders = array();
   protected $responseCode = null;
   protected $request = null;
+  protected $tableTypes = array ( //lookup for table-to-object representation
+		'places' => "FactualPlace"
+  );
 
   /**
    * Constructor, parses return values from CURL in factual::request() 
@@ -41,6 +45,7 @@ abstract class FactualResponse {
 	 */
 	protected function parseResponse($apiResponse){
 		$this->parseJSON($apiResponse['body']);
+		$this->tableName = $apiResponse['tablename'];
 		$this->responseHeaders = $apiResponse['headers'];
 		$this->responseCode = $apiResponse['code'];
 		$this->request = $apiResponse['request'];
@@ -60,6 +65,14 @@ abstract class FactualResponse {
 	 */
 	public function getResponseCode(){
 		return $this->responseCode;
+	}
+
+	/**
+	 * Gets table name call was made against
+	 * @return string
+	 */
+	protected function getTableName(){
+		return $this->tableName;
 	}
 
 	/**
@@ -195,11 +208,35 @@ abstract class FactualResponse {
   	return $this->request;
   }
   
+  /**
+   * Get table name queried
+   * @return string
+   */
+  public function getTable(){
+  	return $this->tableName;
+  }  
+  
    /**
+   * Get http headers returned by Factual
+   * @return string
+   */
+  public function getHeaders(){
+  	return $this->responseHeaders;
+  }   
+  
+   /**
+   * Get http status code returned by Factual
+   * @return string
+   */
+  public function getCode(){
+  	return $this->responseCode;
+  }    
+  
+   /*
   * Results as array of objects
-  * @param string type Entity type: Place, Crosswalk
+  * @param string type Entity type: FactualPlace, Crosswalk
   * @return array Array of objects
-  */
+
 	public function getObjects($type){
 		if (is_array($this->data)){
 			foreach ($this->data as $entity){
@@ -210,7 +247,7 @@ abstract class FactualResponse {
 			return array();
 		}
 	}
-
+  */
 }
 ?>
 
