@@ -20,12 +20,13 @@ require_once('oauth-php/library/OAuthRequester.php');
  */
 class Factual {
 	
-  const DRIVER_HEADER_TAG = "factual-php-driver-v1.1.0"; //Custom header
+  const DRIVER_HEADER_TAG = "factual-php-driver-v1.1.1"; //Custom header
   private $factHome; //string assigned from config
   private $signer; //OAuthStore object
   private $config; //array from config.ini file on construct
   private $geocoder; //geocoder object (unsupported, experimental)
   const CONFIGPATH = "config.ini"; //where the config file is found: path + file
+  private $lastTable = null; //last table queried
 
   /**
    * Constructor. Creates authenticated access to Factual.
@@ -82,23 +83,21 @@ class Factual {
    */
   public function fetch($tableName, $query) {
   	switch (get_class($query)) {
-    case "FactualQuery":
-    	$res = new ReadResponse($this->request($this->urlForFetch($tableName, $query)));
-    	$this->setEntityType($tableName, $res);
-        return $res;
-        break;
-    case "CrosswalkQuery":
-        return new CrosswalkResponse($this->request($this->urlForCrosswalk($tableName, $query)));
-        break;
-    case "ResolveQuery":
-        $res = new ResolveResponse($this->request($this->urlForResolve($tableName, $query)));
-    	$this->setEntityType($tableName, $res);
-        return $res;        
-        break;
-    default:
-    	throw new Exception(__METHOD__." class type '".get_class($query)."' not recognized");
-    	return false;
+	    case "FactualQuery":
+	    	$res = new ReadResponse($this->request($this->urlForFetch($tableName, $query)));
+	        break;
+	    case "CrosswalkQuery":
+	        $res = new CrosswalkResponse($this->request($this->urlForCrosswalk($tableName, $query)));
+	        break;
+	    case "ResolveQuery":
+	        $res = new ResolveResponse($this->request($this->urlForResolve($tableName, $query))); 
+	        break;
+	    default:
+	    	throw new Exception(__METHOD__." class type '".get_class($query)."' not recognized");
+	    	$res = false;
 	} 
+	$this->lastTable = $tableName; //assign table name to object for logging
+	return $res;   
   }
   
   /**
@@ -167,6 +166,7 @@ class Factual {
     try {
     	$result = $request->doRequest(0,$customHeaders);
     	$result['request'] = $urlStr; //pass request string onto response
+    	$result['tablename'] = $this->lastTable; //pass table name to result object
     	return $result;
 	} catch(Exception $e) {
 		$factualE = new FactualApiException($e);
