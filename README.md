@@ -28,8 +28,8 @@ Results are returned as the JSON returned by Factual but you will likely want to
 
 ## Tables
 The wrapper supports all tables in the Factual v3 API
-- Use table <tt>global</tt> for international places
-- Use table <tt>places</tt> for US places only
+*   Use table <tt>global</tt> for international places
+*   Use table <tt>places</tt> for US places only
 
 ## Setup
 
@@ -501,5 +501,5 @@ Add your secret and key to <tt>test.php</tt> and run on the command line: 'php t
 # Notes and Miscellany
 
 ##Autoloading
-the __autoload() method is deprecated, so this library uses spl_autoload_register(), not least to avoid conflicts with _autoload() methods from other libs.   
-SPL must be enabled (not sure? Use <tt>php</tt> -i' on the command line.).  If you cannot enable SPL, move factual::factualAutoload() out of the class and rename it '__autoload()'.
+
+The <tt>__autoload()</tt> method is deprecated; this library uses <tt>spl_autoload_register()</tt>.
