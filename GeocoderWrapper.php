@@ -10,7 +10,7 @@
  * @license Apache 2.0
  */
 
-class Geocoder {
+class GeocoderWrapper {
 
 	protected $endPoint = 'http://query.yahooapis.com/v1/public/yql'; //public query point						
 	protected $flags = "G"; //placefinder geocoder flags
