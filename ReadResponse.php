@@ -11,18 +11,11 @@
 class ReadResponse extends FactualResponse {
 	protected $entityType = null;
 
-	/**
-	 * Sets entity type should we require a little vertical-specific ORM love down the road
-	 * @param string type
-	 */
-	public function setEntityType($type) {
-		$this->entityType = $type;
-	}
 
-	/**
+	/*
 	 * Results as array of PHP objects (experimental)
 	 * @return array Array of objects
-	 */
+
 	public function getObjects() {
 		if ($this->entityType) {
 			return parent :: asObjects($this->entityType);
@@ -30,6 +23,6 @@ class ReadResponse extends FactualResponse {
 			throw new Exception("Method " . __METHOD__ . " called but no entity type set");
 		}
 	}
-
+	 */
 }
 ?>
