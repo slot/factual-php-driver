@@ -20,7 +20,7 @@ require_once('oauth-php/library/OAuthRequester.php');
  */
 class Factual {
 	
-  const DRIVER_HEADER_TAG = "factual-php-driver-v1.1.1"; //Custom header
+  const DRIVER_HEADER_TAG = "factual-php-driver-v1.1.1"; //Custom headerPHP 
   private $factHome; //string assigned from config
   private $signer; //OAuthStore object
   private $config; //array from config.ini file on construct
@@ -112,21 +112,8 @@ class Factual {
 			$query->add($key,$value);
 		}
         $res = new ResolveResponse($this->request($this->urlForResolve($tableName, $query)));
-    	$this->setEntityType($tableName, $res);
         return $res->getResolved(); 		
 	}
-
-	/**
-	 * Assigns entity type by table name to response object according to config
-	 * @param string tableName (places, restaurants, etc.)
-	 * @param object res query response object
-	 * @return void
-	 */
-	 private function setEntityType($tableName, $res){
-	 	if ($this->config['tabletypes'][$tableName]){
-	 		$res->setEntityType($this->config['tabletypes'][$tableName]);
-	 	}
-	 }
 
 	/**
 	 * @return object SchemaResponse object
