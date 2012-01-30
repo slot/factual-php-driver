@@ -25,7 +25,7 @@ class Factual {
   private $signer; //OAuthStore object
   private $config; //array from config.ini file on construct
   private $geocoder; //geocoder object (unsupported, experimental)
-  const CONFIGPATH = "config.ini"; //where the config file is found: path + file
+  private $configPath = "config.ini"; //where the config file is found: path + file
   private $lastTable = null; //last table queried
 
   /**
@@ -44,13 +44,26 @@ class Factual {
 	spl_autoload_register("self::factualAutoload", true);
   }
 
+	/**
+	 * Sets location of config file at runtime
+	 * @param string path path+filename
+	 * @return void
+	 */
+	protected function setConfigPath($path){
+		$this->configPath = $path;
+	}
+
  	/**
  	 * Loads config file from ini
  	 * @return void
  	 */
  	protected function loadConfig(){
  		if (!$this->config){
- 			$this->config = parse_ini_file(self::CONFIGPATH,true);
+ 			try{
+ 				$this->config = parse_ini_file($this->configPath,true);
+ 			} catch (Exception $e) {
+ 				throw new Exception ("Failed parsing config file");
+ 			}
  		}
  	}
  
