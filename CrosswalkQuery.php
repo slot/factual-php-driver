@@ -8,7 +8,7 @@
  * @package Factual
  * @license Apache 2.0
  */
-class CrosswalkQuery {
+class CrosswalkQuery extends FactualQuery {
 	private $factualId; //string
 	private $limit; //int
 	private $_namespace; //string
@@ -17,7 +17,6 @@ class CrosswalkQuery {
 
 	/**
 	 * Whether this lib must perform URL encoding.
-	 * Some oauth libs urlencode the params for you (one included here does), others do not
 	 * Set to avoid double or absent encoding
 	 */
 	const URLENCODE = true;

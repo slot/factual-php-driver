@@ -21,7 +21,6 @@ class FactualQuery {
 
 	/**
 	 * Whether this lib must perform URL encoding.
-	 * Some oauth libs urlencode the params for you (one included here does), others do not
 	 * Set to avoid double or absent encoding
 	 */
 	const URLENCODE = true;
@@ -145,24 +144,6 @@ class FactualQuery {
 	 */
 	public function field($field) {
 		return new QueryBuilder($this, $field);
-	}
-
-	/**
-	 * Begins construction of a new row filter for this Query.
-	 * @param string field The name of the field on which to filter.
-	 * @return obj QueryBuilder A partial representation of the new row filter.
-	 * @todo: implement
-	 */
-	public function near(string $text, int $meters) {
-		throw new FactualApiException("Method " . __METHOD__ . " not yet implemented in PHP Wrapper");
-		/*
-		Coord coord = new DataScienceToolkit().streetToCoord(text);
-		if(coord != null) {
-		return within(new Circle(coord, meters));
-		} else {
-		throw new FactualApiException("Could not locate place based on text: '" + text + "'");
-		}
-		*/
 	}
 
 	/**

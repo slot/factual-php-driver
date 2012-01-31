@@ -4,11 +4,10 @@
  * This is a refactoring of the Factual Driver by Aaron: https://github.com/Factual/factual-java-driver
  * @author Tyler
  */
-class ResolveQuery {
+class ResolveQuery extends FactualQuery {
   private $values = array();
   	/**
 	 * Whether this lib must perform URL encoding.
-	 * Some oauth libs urlencode the params for you (one included here does), others do not
 	 * Set to avoid double or absent encoding
 	 */
 	const URLENCODE = true;
