@@ -292,6 +292,7 @@ class FactualTest {
 		$this->testVersion();
 		$this->classConflicts();
 		$this->testExt();
+		$this->testAmpEncoding();
 		$this->testConnect();
 		$this->testQueryFilterLimitSort();
 		$this->testMultiFilter();
@@ -318,6 +319,18 @@ class FactualTest {
 		$this->writeToFile = $fileName;
 	}
 
+	private function testAmpEncoding(){
+		$requestSample = 10;
+		$query = new FactualQuery;
+		$query->search("Food & Beverage > Restaurants");
+		$query->limit($requestSample);
+		$res = $this->factual->fetch($this->testTables['global'], $query);
+		if ($res->size() == $requestSample){
+			$this->msg("HTML Encoding", true);
+		} else {
+			$this->msg("HTML Encoding", false);
+		}
+	}
 
 	private function testResponseMetadata(){
 		$requestSample = 1;

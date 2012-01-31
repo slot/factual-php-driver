@@ -11,7 +11,7 @@ class ResolveQuery {
 	 * Some oauth libs urlencode the params for you (one included here does), others do not
 	 * Set to avoid double or absent encoding
 	 */
-	const URLENCODE = false;
+	const URLENCODE = true;
 
 	/**
 	 * Adds name/key pair to query for eventual resolution

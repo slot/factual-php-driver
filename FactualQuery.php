@@ -24,7 +24,7 @@ class FactualQuery {
 	 * Some oauth libs urlencode the params for you (one included here does), others do not
 	 * Set to avoid double or absent encoding
 	 */
-	const URLENCODE = false;
+	const URLENCODE = true;
 
 	/**
 	 * Holds all row filters for this Query. Implicit top-level AND.
