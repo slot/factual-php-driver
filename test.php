@@ -1,4 +1,7 @@
 <?php
+//Set error level
+error_reporting (E_ERROR);
+
 //best run this script in CLI: 'php test.php'
 require_once('FactualTest.php');
 
