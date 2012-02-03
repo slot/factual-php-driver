@@ -314,9 +314,11 @@ class FactualTest {
 	/**
 	 * Set file to log report to. Echoes to screen by default
 	 * @return void
-	 */
+	 */	
 	public function setLogFile($fileName = null) {
-		$this->writeToFile = $fileName;
+		if ($fileName){
+			$this->writeToFile = $fileName;
+		}
 	}
 
 	private function testAmpEncoding(){
