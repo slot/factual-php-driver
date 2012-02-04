@@ -41,7 +41,7 @@ class Factual {
     $options = array('consumer_key' => $key, 'consumer_secret' => $secret);
 	$this->signer = OAuthStore::instance("2Leg", $options );
 	//register autoloader
-	spl_autoload_register("self::factualAutoload", true);
+	spl_autoload_register(array(get_class(), 'factualAutoload'));
   }
 
 	/**
@@ -213,7 +213,7 @@ class Factual {
    * Autoloader for file dependencies
    * Called by spl_autoload_register() to avoid conflicts with autoload() methods from other libs
    */
-  public function factualAutoload($className) {
+  public static function factualAutoload($className) {
   		include dirname(__FILE__)."/".$className . ".php";
   }
   
