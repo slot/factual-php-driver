@@ -202,16 +202,22 @@ class FactualQuery {
 	 * @internal re-activate geobounds method
 	 */
 	public function toUrlQuery() {
-		$temp[] = $this->urlPair("select", $this->fieldsJsonOrNull());
-		$temp[] = $this->urlPair("q", $this->fullTextSearch);
-		$temp[] = $this->urlPair("sort", $this->sortsJsonOrNull());
-		$temp[] = ($this->limit > 0 ? $this->urlPair("limit", $this->limit) : null);
-		$temp[] = ($this->offset > 0 ? $this->urlPair("offset", $this->offset) : null);
-		$temp[] = ($this->includeRowCount ? $this->urlPair("include_count", "true") : null); //must use string true
-		$temp[] = $this->urlPair("filters", $this->rowFiltersJsonOrNull());
-		$temp[] = $this->urlPair("geo", $this->geoBoundsJsonOrNull());
-		$temp = array_filter($temp); //remove nulls
-		return implode("&", $temp);
+
+		$temp['select'] = $this->fieldsJsonOrNull();
+		$temp['q'] = $this->fullTextSearch;
+		$temp['sort'] = $this->sortsJsonOrNull();
+		$temp['limit'] = ($this->limit > 0 ? $this->limit : null);
+		$temp['offset'] = ($this->offset > 0 ? $this->offset : null);
+		$temp['include_count'] =  ($this->includeRowCount ? "true" : null);
+		$temp['filters'] = $this->rowFiltersJsonOrNull();
+		$temp['geo'] = $this->geoBoundsJsonOrNull();
+		$temp = array_filter($temp); //remove nulls		
+
+		//encode (cannot use http_build_query() as we need to *raw* encode adn this not provided until v5.4)
+		foreach ($temp as $key => $value){
+			$temp2[] = $key."=".rawurlencode($value);		
+		}	
+		return implode("&", $temp2);
 	}
 
 	public function toString() {
@@ -219,28 +225,6 @@ class FactualQuery {
 			return urldecode($this->toUrlQuery());
 		} catch (Exception $e) {
 			throw $e;
-		}
-	}
-
-	/**
-	 * @param string name Name
-	 * @param string val Value
-	 * @return string
-	 * @internal Not sure why val is obj in Java version in return line
-	 */
-	private function urlPair($name, $val) {
-		if ($val != null) {
-			try {
-				if (self :: URLENCODE) {
-					return $name . "=" . urlencode($val);
-				} else {
-					return $name . "=" . $val;
-				}
-			} catch (Exception $e) {
-				throw $e;
-			}
-		} else {
-			return null;
 		}
 	}
 
