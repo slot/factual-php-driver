@@ -292,7 +292,7 @@ class FactualTest {
 		$this->testVersion();
 		$this->classConflicts();
 		$this->testExt();
-		$this->testAmpEncoding();
+		$this->testEncoding();
 		$this->testConnect();
 		$this->testQueryFilterLimitSort();
 		$this->testMultiFilter();
@@ -321,10 +321,10 @@ class FactualTest {
 		}
 	}
 
-	private function testAmpEncoding(){
+	private function testEncoding(){
 		$requestSample = 10;
 		$query = new FactualQuery;
-		$query->search("Food & Beverage > Restaurants");
+		$query->field("category")->equal("Food & Beverage > Restaurants");
 		$query->limit($requestSample);
 		$res = $this->factual->fetch($this->testTables['global'], $query);
 		if ($res->size() == $requestSample){
@@ -335,10 +335,11 @@ class FactualTest {
 	}
 
 	private function testResponseMetadata(){
-		$requestSample = 1;
+		$requestSample = 10;
 	 	$query = new FactualQuery;
 		$query->search("Sushi");
 		$query->limit($requestSample);
+		$query->includeRowCount();
 	    $res = $this->factual->fetch($this->testTables['global'], $query);
 		
 		// Get URL request string
@@ -368,6 +369,14 @@ class FactualTest {
 		} else {
 			$this->msg("Response Code", false);
 		}	
+		
+		// Get total row count returned by Factual	
+		if ($res->getRowCount() > 0){
+			$this->msg("Total Row Count", true);
+		} else {
+			$this->msg("Total Row Count", false);
+		}			
+		
 	}
 
 
