@@ -12,7 +12,7 @@ class FactualTest {
 
 	private $factual;
 	private $writeToFile = null;
-	private $testTables = array('global'=>"global",'resolve'=>"places",'crosswalk'=>"places",'schema'=>"places");
+	private $testTables = array('global'=>"global",'resolve'=>"places",'crosswalk'=>"places",'schema'=>"places",'restaurants'=>"restaurants-us",'us'=>"places");
 	private $classes = array (
 		"FactualCircle",
 		"FactualColumnSchema",
@@ -295,6 +295,9 @@ class FactualTest {
 		$this->testEncoding();
 		$this->testConnect();
 		$this->testQueryFilterLimitSort();
+		$this->testUnicode();
+		$this->testPunctuation();
+		$this->testInCriterion();
 		$this->testMultiFilter();
 		$this->testGeoSearch();
 		$this->testMultiCountry();
@@ -380,6 +383,47 @@ class FactualTest {
 	}
 
 
+	private function testUnicode(){
+	 	$requestSample = 10;
+	 	$query = new FactualQuery;
+		$query->field("locality")->equal("大阪市");
+		$query->limit($requestSample);
+	    $res = $this->factual->fetch($this->testTables['global'], $query);
+		if ($res->size() !== $requestSample){
+			$this->msg("Unicode", false);
+		} else {
+			$this->msg("Unicode", true);
+		}
+	}
+
+	private function testPunctuation(){
+	 	$requestSample = 1;
+	 	$query = new FactualQuery;
+		$query->search("McDonald's, Santa Monica");
+		$query->limit($requestSample);
+	    $res = $this->factual->fetch($this->testTables['us'], $query);
+		if ($res->size() !== $requestSample){
+			$this->msg("Punctuation", false);
+		} else {
+			$this->msg("Punctuation", true);
+		}
+	}
+
+
+	private function testInCriterion(){
+	 	$requestSample = 10;
+	 	$query = new FactualQuery;
+		$query->search("Sushi");
+		$query->field("locality")->in("Santa Monica,Los Angeles,Culver City");
+		$query->limit($requestSample);
+	    $res = $this->factual->fetch($this->testTables['restaurants'], $query);
+		if ($res->size() !== $requestSample){
+			$this->msg("'In' Criterion", false);
+		} else {
+			$this->msg("'In' Criterion", true);
+		}
+	}
+
 	private function testMultiCountry(){
 	 	$requestSample = 10;
 	 	$query = new FactualQuery;
@@ -446,6 +490,10 @@ class FactualTest {
 			$res = $this->factual->fetch($this->testTables['global'], $query);
 			if ($res->size() !== $requestSample){
 				$this->msg("Checking ".$value, false);
+				
+				print_r(urldecode($res->getRequest()));
+				exit;
+				
 			} else {
 				$this->msg("Checking ".$value, true);
 			}
