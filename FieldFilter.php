@@ -7,7 +7,7 @@ class FieldFilter implements FactualFilter {
   private $arg; //obj
 
   /**
-   * Greates fielters on specific field criteria
+   * Creates filters on specific field criteria
    * @param string op Operator
    * @param string fieldName Field Name
    * @param string object Argument 
