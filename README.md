@@ -102,7 +102,7 @@ You can specify more than one sort, and the results will be sorted with the firs
 	$res = $factual->fetch("places", $query);
 	print_r($res->getData());
 
-## Limit and Offset
+## Paging: Limit and Offset
 
 You can use limit and offset to support basic results paging. For example:
 
@@ -150,6 +150,10 @@ To help with debugging, we provide in the response object metadata about the que
 
 	// Get http status code returned by Factual
 	return $res->getCode();
+	
+	//get the total number of results
+	//must be explicitly requested in advance of request using Query::includeRowCount()
+	return $res->getRowCount();
 
 # Read API
 ## All Top Level Query Parameters
