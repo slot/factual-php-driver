@@ -19,6 +19,10 @@ class FactualCircle {
 	 * @param int metersRadius the radius, in meters, of this Circle.
 	 */
 	public function __construct($lat, $lon, $meters) {
+		if (!is_numeric($lat) || !is_numeric($lon)){
+			throw new Exception("Cannot create FactualCircle: bad lat/lon parameters: lat='".$lat."',lon='".$lon."'");
+			return false;
+		}
 		$this->lat = $lat;
 		$this->lon = $lon;
 		$this->meters = $meters;
