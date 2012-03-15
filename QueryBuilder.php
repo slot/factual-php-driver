@@ -40,22 +40,20 @@ class QueryBuilder {
 		return $this->addFilter("\$neq", $arg);
 	}
 	/**
-	 * @param array arg Array of arguments
+	 * @param mixed arg Array of arguments, or comma-delineated string thereof
 	 */
 	public function in($args) {
 		if (!is_array($args)) {
-			throw new Exception("The 'in' operator requires array argument");
-			return false;
+			$args = explode(",",$args);
 		}
 		return $this->addFilter("\$in", $args);
 	}
 	/**
-	 * @param array arg Array of arguments
+	 * @param mixed arg Array of arguments, or comma-delineated string thereof
 	 */
 	public function notIn($args) {
 		if (!is_array($args)) {
-			throw new Exception("The 'nin' operator requires array argument");
-			return false;
+			$args = explode(",",$args);
 		}
 		return $this->addFilter("\$nin", $args);
 	}
@@ -75,23 +73,21 @@ class QueryBuilder {
 	}
 
 	/**
-	 * @param array arg Array of arguments
+	 * @param mixed arg Array of arguments, or comma-delineated string thereof
 	 */
 	public function beginsWithAny($args) {
 		if (!is_array($args)) {
-			throw new Exception("The 'bwin' operator requires array argument");
-			return false;
+			$args = explode(",",$args);
 		}
 		return $this->addFilter("\$bwin", $args);
 	}
 
 	/**
-	 * @param array arg Array of arguments
+	 * @param mixed arg Array of arguments, or comma-delineated string thereof
 	 */
 	public function notBeginsWithAny($args) {
 		if (!is_array($args)) {
-			throw new Exception("The 'nbwin' operator requires array argument");
-			return false;
+			$args = explode(",",$args);
 		}
 		return $this->addFilter("\$nbwin", $args);
 	}
