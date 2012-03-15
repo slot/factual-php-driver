@@ -409,18 +409,22 @@ class FactualTest {
 		}
 	}
 
-
 	private function testInCriterion(){
 	 	$requestSample = 10;
 	 	$query = new FactualQuery;
 		$query->search("Sushi");
-		$query->field("locality")->in("Santa Monica,Los Angeles,Culver City");
+		try {
+		$query->field("locality")->in(array("Santa Monica","Los Angeles,Culver City"));
 		$query->limit($requestSample);
-	    $res = $this->factual->fetch($this->testTables['restaurants'], $query);
+		    $res = $this->factual->fetch($this->testTables['restaurants'], $query);		
+		} catch (Exception $e) {
+			$this->msg("'In' Filter", false, $e->getMessage());
+			return false;
+		}
 		if ($res->size() !== $requestSample){
-			$this->msg("'In' Criterion", false);
+			$this->msg("'In' Filter", false);
 		} else {
-			$this->msg("'In' Criterion", true);
+			$this->msg("'In' Filter", true);
 		}
 	}
 
@@ -428,7 +432,7 @@ class FactualTest {
 	 	$requestSample = 10;
 	 	$query = new FactualQuery;
 		$query->search("Sushi");
-		$query->field("country")->in("US,CA");
+		$query->field("country")->in(array("US","CA"));
 		$query->limit($requestSample);
 	    $res = $this->factual->fetch($this->testTables['global'], $query);
 		if ($res->size() !== $requestSample){
@@ -664,7 +668,7 @@ class FactualTest {
 		$this->msg("PHP verison v5+", $status);
 	}
 
-	private function msg($mesage, $status) {
+	private function msg($mesage, $status, $deets=null) {
 		$lineLength = 40;
 		if (is_bool($status)) {
 			//convert to string
@@ -683,7 +687,9 @@ class FactualTest {
 			}
 		}
 		//fancypants alignment
-		$message = $mesage . str_repeat(" ", $lineLength -strlen($mesage)) . $status . "\n";
+		$message = $mesage . str_repeat(" ", $lineLength -strlen($mesage)) . $status;
+		if ($deets){$message .= "\t".$deets;}
+		$message .= "\n";
 		if ($this->writeToFile) {
 			$fp = fopen($this->writeToFile, 'a');
 			fwrite($fp,$message);
