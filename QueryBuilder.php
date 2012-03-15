@@ -40,20 +40,22 @@ class QueryBuilder {
 		return $this->addFilter("\$neq", $arg);
 	}
 	/**
-	 * @param mixed arg String of comma-delineated arguments or array therof
+	 * @param array arg Array of arguments
 	 */
 	public function in($args) {
-		if (is_array($args)) {
-			$args = implode(",", $args);
+		if (!is_array($args)) {
+			throw new Exception("The 'in' operator requires array argument");
+			return false;
 		}
 		return $this->addFilter("\$in", $args);
 	}
 	/**
-	 * @param mixed arg String of comma-delineated arguments or array therof
+	 * @param array arg Array of arguments
 	 */
 	public function notIn($args) {
-		if (is_array($args)) {
-			$args = implode(",", $args);
+		if (!is_array($args)) {
+			throw new Exception("The 'nin' operator requires array argument");
+			return false;
 		}
 		return $this->addFilter("\$nin", $args);
 	}
