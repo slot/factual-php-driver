@@ -75,21 +75,23 @@ class QueryBuilder {
 	}
 
 	/**
-	 * @param mixed arg String of comma-delineated arguments or array therof
+	 * @param array arg Array of arguments
 	 */
 	public function beginsWithAny($args) {
-		if (is_array($args)) {
-			$args = implode(",", $args);
+		if (!is_array($args)) {
+			throw new Exception("The 'bwin' operator requires array argument");
+			return false;
 		}
 		return $this->addFilter("\$bwin", $args);
 	}
 
 	/**
-	 * @param mixed arg String of comma-delineated arguments or array therof
+	 * @param array arg Array of arguments
 	 */
 	public function notBeginsWithAny($args) {
-		if (is_array($args)) {
-			$args = implode(",", $args);
+		if (!is_array($args)) {
+			throw new Exception("The 'nbwin' operator requires array argument");
+			return false;
 		}
 		return $this->addFilter("\$nbwin", $args);
 	}
