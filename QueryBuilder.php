@@ -125,13 +125,13 @@ class QueryBuilder {
 	 * @return obj Query object
 	 */
 	private function addFilter($op, $arg) {
-		if (is_array($arg)) {
-			foreach ($arg as $a) {
-				$this->query->add(new FieldFilter($op, $this->fieldName, $a));
-			}
-		} else {
+		//if (is_array($arg)) {
+			//foreach ($arg as $a) {
+				//$this->query->add(new FieldFilter($op, $this->fieldName, $a));
+			//}
+		//} else {
 			$this->query->add(new FieldFilter($op, $this->fieldName, $arg));
-		}
+		//}
 
 		return $this->query;
 	}
