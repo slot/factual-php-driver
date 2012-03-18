@@ -32,6 +32,16 @@ class CrosswalkQuery extends FactualQuery {
 		return $this;
 	}
 
+	//Overides inherited function
+	public function sortDesc($field){
+		return $this; 
+	}
+
+	//Overides inherited function
+	public function sortAsc($field) {
+		return $this;
+	}
+
 	/**
 	 * Adds the specified <tt>limit</tt> to this Query. The amount of returned
 	 * Crosswalk records will not exceed this limit.
