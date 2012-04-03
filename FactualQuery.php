@@ -155,6 +155,7 @@ class FactualQuery {
 	 */
 	public function within($circle) {
 		$this->circle = $circle;
+		
 		return $this;
 
 	}
@@ -279,7 +280,12 @@ class FactualQuery {
 		$group = new FilterGroup();
 		$group->op($op);
 		foreach ($queries as $query) {
-			$group->add(array_pop($query->rowFilters));
+			if (!$query->rowFilters){ //check to ensure nly filters are combined
+				throw new Exception("Operator ".$op." can be used only to combine row filters");
+				return false;
+			} else {
+				$group->add(array_pop($query->rowFilters));
+			}
 		}
 		$this->add($group);
 		return $this;
