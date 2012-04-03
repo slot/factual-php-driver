@@ -12,7 +12,7 @@ class FieldFilter implements FactualFilter {
    * @param string fieldName Field Name
    * @param string object Argument 
    */
-  public function FieldFilter($op, $fieldName, $arg) {
+  public function __construct($op, $fieldName, $arg) {
     $this->op = $op;
     $this->fieldName = $fieldName;
     $this->arg = $arg;
