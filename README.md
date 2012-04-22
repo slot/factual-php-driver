@@ -252,12 +252,12 @@ The driver supports various row filter logic. Examples:
   <tr>
     <td>in</td>
     <td>equals any of</td>
-    <td><tt>$query->field("region")->in("MA,VT,NH,RI,CT")</tt> or <tt>$query->field("region")->in(array("MA", "VT", "NH", "RI", "CT"))</tt></td>
+    <td><tt>$query->field("region")->in(array("MA", "VT", "NH", "RI", "CT"))</tt></td>
   </tr>
   <tr>
     <td>notIn</td>
     <td>does not equal any of</td>
-    <td><tt>$query->field("locality")->notIn("Los Angeles,Philadelphia")</tt> or <tt>$query->field("locality")->notIn(array("Los Angeles","Philadelphia")</tt></td>
+    <td><tt>$query->field("locality")->notIn(array("Los Angeles","Philadelphia")</tt></td>
   </tr>
   <tr>
     <td>beginsWith</td>
@@ -272,12 +272,12 @@ The driver supports various row filter logic. Examples:
   <tr>
     <td>beginsWithAny</td>
     <td>begins with any of</td>
-    <td><tt>$query->field("name")->beginsWithAny("star,coffee,tull")</tt> or <tt>$query->field("name")->beginsWithAny(array("star", "coffee", "tull"))</tt> </td>
+    <td><tt>$query->field("name")->beginsWithAny(array("star", "coffee", "tull"))</tt> </td>
   </tr>
   <tr>
     <td>notBeginsWithAny</td>
     <td>does not begin with any of</td>
-    <td><tt>$query->field("name")->notBeginsWithAny("star,coffee,tull")</tt> or <tt>$query->field("name")->notBeginsWithAny(array("star", "coffee", "tull"))</tt></td>
+    <td><tt>$query->field("name")->notBeginsWithAny(array("star", "coffee", "tull"))</tt></td>
   </tr>
   <tr>
     <td>blank</td>
