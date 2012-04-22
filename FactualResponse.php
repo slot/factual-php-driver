@@ -201,11 +201,11 @@ abstract class FactualResponse {
   }
   
   /**
-   * Get URL request string, does not include auth
+   * Get url-decoded request string, does not include auth.
    * @return string
    */
   public function getRequest(){
-  	return $this->request;
+  	return urldecode($this->request);
   }
   
   /**
