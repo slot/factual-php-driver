@@ -526,7 +526,7 @@ These methods are experimental and unsupported, but (we hope) helpful:
 	print_r($res);	
 
 #Testing
-Add your secret and key to <tt>test.php</tt> and run on the command line: 'php test.php'.  This checks your PHP install and performs a number of ad-hoc unit tests.
+Add your secret and key to <tt>test.php</tt> and run on the command line: 'php test.php' ('php -f test.php' on Windows).  This checks your PHP install environmnt and performs a number of ad-hoc unit tests.
 
 # Notes and Miscellany
 
