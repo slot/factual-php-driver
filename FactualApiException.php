@@ -9,66 +9,17 @@
  * @license Apache 2.0
  */
 class FactualApiException extends Exception {
-	private $requestUrl; //string
-	private $requestMethod; //string
-	private $status;
-	private $version;
-	private $errorType;
+	protected $info; //string
 
-	public function __construct($e) {
-		$response = $e->getMessage();
-		$struct = json_decode(strstr($response, "{"), true);
-		$this->message = $struct['message'];
-		$this->status = $struct['status'];
-		$this->version = $struct['version'];
-		$this->errorType = $struct['error_type'];
-		$this->code = substr($response, strpos($response, "code") + 5, 3);
+	public function __construct($info) {
+		$this->info = $info;
+		$this->message = $info['message']." Details:\n".print_r($info,true)."\n use FactualApiException::debug()" .
+				" to obtain this information programatically. See https://github.com/Factual/factual-php-driver#where-to-get-help" .
+				" for information on submitting bugs and questions.\n\n";
 	}
 
-	public function requestUrl($url) {
-		$this->requestUrl = $url;
-		return $this;
+	public function debug(){
+		return $this->info;
 	}
-
-	public function requestMethod($method) {
-		$this->requestMethod = $method;
-		return $this;
-	}
-
-	/**
-	 * @return the URL used to make the offending request to Factual.
-	 */
-	public function getRequestUrl() {
-		return $this->requestUrl;
-	}
-
-	/**
-	 * @return the URL used to make the offending request to Factual.
-	 */
-	public function getStatus() {
-		return $this->status;
-	}
-
-	/**
-	 * @return the URL used to make the offending request to Factual.
-	 */
-	public function getVersion() {
-		return $this->version;
-	}
-
-	/**
-	 * @return the URL used to make the offending request to Factual.
-	 */
-	public function getErrorType() {
-		return $this->errorType;
-	}
-
-	/**
-	 * @return the HTTP request method used to make the offending request to Factual.
-	 */
-	public function getRequestMethod() {
-		return $this->requestMethod;
-	}
-
 }
 ?>
