@@ -151,6 +151,18 @@ class Factual {
     return $this->factHome."t/".$tableName."?".$query->toUrlQuery();
   }
 
+
+	/**
+	 * Signs a 'raw' request (a complete query) and returns the JSON results
+	 * Note that this does not process the quey at all -- just signs and returns results
+	 * @param string urlStr unsigned URL request. Must be correctly escaped.
+	 * @return string JSON reponse
+	 */
+  public function rawGet($urlStr){
+  	$res = $this->request($urlStr);
+  	return $res['body'];
+  }
+
 	/**
 	 * Sign the request, perform a curl request and return the results
 	 * @param string urlStr unsigned URL request
@@ -172,6 +184,7 @@ class Factual {
 		$factualE = new FactualApiException($e);
 		$factualE->requestMethod($requestMethod);	
 		$factualE->requestUrl($urlStr);
+		
 		throw $factualE;
 	}
   }
