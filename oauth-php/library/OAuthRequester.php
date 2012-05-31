@@ -114,20 +114,16 @@ class OAuthRequester extends OAuthRequestSigner
 		$text   = $this->curl_raw($curl_options);
 		$result = $this->curl_parse($text);	
 		
-		if ($result['code'] >= 400)
-		{
-			throw new OAuthException2('Request failed with code ' . $result['code'] . ': ' . $result['body']);
+		//altered this section to pass entire result thru rather than throwing exception (handling this in Factual class)
+		if ($result['code'] < 400){
+			// Record the token time to live for this server access token, immediate delete iff ttl <= 0
+			// Only done on a succesful request.	
+			$token_ttl = $this->getParam('xoauth_token_ttl', false);
+			if (is_numeric($token_ttl))	{
+				$this->store->setServerTokenTtl($this->getParam('oauth_consumer_key',true), $this->getParam('oauth_token',true), $token_ttl);
+			}
 		}
-
-		// Record the token time to live for this server access token, immediate delete iff ttl <= 0
-		// Only done on a succesful request.	
-		$token_ttl = $this->getParam('xoauth_token_ttl', false);
-		if (is_numeric($token_ttl))
-		{
-			$this->store->setServerTokenTtl($this->getParam('oauth_consumer_key',true), $this->getParam('oauth_token',true), $token_ttl);
-		}
-
-		return $result;
+			return $result;
 	}
 
 	
