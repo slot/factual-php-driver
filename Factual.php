@@ -171,8 +171,8 @@ class Factual {
 	 * @return string JSON reponse
 	 */
   public function rawGet($urlStr){
-  	return $this->request($urlStr);
-  	//return $res['body'];
+  	$res = $this->request($urlStr);
+  	return $res['body'];
   }
 
 	/**
@@ -183,7 +183,7 @@ class Factual {
   private function request($urlStr) {
 	$requestMethod = "GET";
 	$params = null;
-	$customHeaders[CURLOPT_HTTPHEADER] = array("X-Factual-Lib: ".$this->config['driverversion']); //custom header
+	$customHeaders[CURLOPT_HTTPHEADER] = array("X-Factual-Lib: ".$this->config['factual']['driverversion']); //custom header
     // Build request with OAuth request params
     $request = new OAuthRequester($urlStr, $requestMethod, $params);
  	//Make request
