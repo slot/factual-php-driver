@@ -4,7 +4,6 @@
  * Requires PHP5, php5-curl, SPL (for autoloading)
  */
 
-
 //Oauth libs (from http://code.google.com/p/oauth-php/)
 require_once('oauth-php/library/OAuthStore.php');
 require_once('oauth-php/library/OAuthRequester.php');
@@ -20,12 +19,12 @@ require_once('oauth-php/library/OAuthRequester.php');
  */
 class Factual {
 	
-  private $factHome; //string assigned from config
-  private $signer; //OAuthStore object
-  private $config; //array from config.ini file on construct
-  private $geocoder; //geocoder object (unsupported, experimental)
-  private $configPath = "config.ini"; //where the config file is found: path + file
-  private $lastTable = null; //last table queried
+  protected $factHome; //string assigned from config
+  protected $signer; //OAuthStore object
+  protected $config; //array from config.ini file on construct
+  protected $geocoder; //geocoder object (unsupported, experimental)
+  protected $configPath = "config.ini"; //where the config file is found: path + file
+  protected $lastTable = null; //last table queried
 
   /**
    * Constructor. Creates authenticated access to Factual.
@@ -134,19 +133,19 @@ class Factual {
     return new SchemaResponse($this->request($this->urlForSchema($tableName)));
   }
 
-  private function urlForSchema($tableName) {
+  protected function urlForSchema($tableName) {
     return $this->factHome . "t/" . $tableName . "/schema";
   }
 
-  private function urlForCrosswalk($tableName, $query) {
+  protected function urlForCrosswalk($tableName, $query) {
     return $this->factHome.$tableName."/crosswalk?".$query->toUrlQuery();
   }
 
-  private function urlForResolve($tableName, $query) {
+  protected function urlForResolve($tableName, $query) {
     return $this->factHome.$tableName."/resolve?".$query->toUrlQuery();
   }
 
-  private function urlForFetch($tableName, $query) {
+  protected function urlForFetch($tableName, $query) {
     return $this->factHome."t/".$tableName."?".$query->toUrlQuery();
   }
 
@@ -180,7 +179,7 @@ class Factual {
 	 * @param string urlStr unsigned URL request
 	 * @return array ex: array ('code'=>int, 'headers'=>array(), 'body'=>string)
 	 */
-  private function request($urlStr) {
+  protected function request($urlStr) {
 	$requestMethod = "GET";
 	$params = null;
 	$customHeaders[CURLOPT_HTTPHEADER] = array("X-Factual-Lib: ".$this->config['factual']['driverversion']); //custom header
@@ -245,7 +244,7 @@ class Factual {
 	* @param string q 
 	* @return array
 	*/
-  private function getGeocoder(){
+  protected function getGeocoder(){
   	if (!$this->geocoder){
   		$this->geocoder = new GeocoderWrapper;
   	}
