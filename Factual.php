@@ -20,7 +20,6 @@ require_once('oauth-php/library/OAuthRequester.php');
  */
 class Factual {
 	
-  const DRIVER_HEADER_TAG = "factual-php-driver-v1.1.1"; //Custom headerPHP 
   private $factHome; //string assigned from config
   private $signer; //OAuthStore object
   private $config; //array from config.ini file on construct
@@ -184,7 +183,7 @@ class Factual {
   private function request($urlStr) {
 	$requestMethod = "GET";
 	$params = null;
-	$customHeaders[CURLOPT_HTTPHEADER] = array("X-Factual-Lib: ".self::DRIVER_HEADER_TAG); //custom header
+	$customHeaders[CURLOPT_HTTPHEADER] = array("X-Factual-Lib: ".$this->config['driverversion']); //custom header
     // Build request with OAuth request params
     $request = new OAuthRequester($urlStr, $requestMethod, $params);
  	//Make request
