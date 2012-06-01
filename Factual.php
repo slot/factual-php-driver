@@ -187,10 +187,9 @@ class Factual {
     // Build request with OAuth request params
     $request = new OAuthRequester($urlStr, $requestMethod, $params);
  	//Make request
-   
 	$result = $request->doRequest(0,$customHeaders);
 	$result['request'] = $urlStr; //pass request string onto response
-	$result['tablename'] = $this->lastTable; //pass table name to result object
+	$result['tablename'] = $this->lastTable; //pass table name to result object (not available with rawGet())
 	//exception handling
 	if ($result['code'] >= 400){
 		$body = json_decode($result['body'],true);
