@@ -202,6 +202,7 @@ class Factual {
 		$info['message'] = $body['message'];
 		$info['headers'] = $result['headers'];
 		$info['request'] = $result['request'];
+		$info['driver'] = $this->config['driverversion'];
 		if (!empty($result['tablename'])){$info['tablename'] = $result['tablename'];}
 		$info['method'] =  $requestMethod;
     	//chuck exception
