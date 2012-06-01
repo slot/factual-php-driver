@@ -551,7 +551,7 @@ The driver mainly offer convenence: it signs requests, builds conformant queries
 	print_r($factual->rawGet($query));	
 	exit;
 
-The rawGet() method only signs and submits the request; remember to escape your JSON.
+The <tt>rawGet()</tt> method only signs and submits the request; remember to escape your JSON.
 
 # Geocoding
 Factual does not provide a geocoding service, but we've integrated a third-party Web Service that can easily be swapped out.
