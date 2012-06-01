@@ -151,6 +151,19 @@ class Factual {
     return $this->factHome."t/".$tableName."?".$query->toUrlQuery();
   }
 
+	protected function urlForFacets($tableName, $query)  {
+    	return "t/" . $tableName . "/facets?".$query->toUrlQuery();
+  }
+
+ /*
+  protected function urlForGeocode() {
+    return "places/geocode";
+  }
+
+  protected function urlForGeopulse() {
+    return "places/geopulse";
+  }
+*/
 
 	/**
 	 * Signs a 'raw' request (a complete query) and returns the JSON results
@@ -159,8 +172,8 @@ class Factual {
 	 * @return string JSON reponse
 	 */
   public function rawGet($urlStr){
-  	$res = $this->request($urlStr);
-  	return $res['body'];
+  	return $this->request($urlStr);
+  	//return $res['body'];
   }
 
 	/**
@@ -175,18 +188,28 @@ class Factual {
     // Build request with OAuth request params
     $request = new OAuthRequester($urlStr, $requestMethod, $params);
  	//Make request
-    try {
-    	$result = $request->doRequest(0,$customHeaders);
-    	$result['request'] = $urlStr; //pass request string onto response
-    	$result['tablename'] = $this->lastTable; //pass table name to result object
-    	return $result;
-	} catch(Exception $e) {
-		$factualE = new FactualApiException($e);
-		$factualE->requestMethod($requestMethod);	
-		$factualE->requestUrl($urlStr);
-		
+   
+	$result = $request->doRequest(0,$customHeaders);
+	$result['request'] = $urlStr; //pass request string onto response
+	$result['tablename'] = $this->lastTable; //pass table name to result object
+	//exception handling
+	if ($result['code'] >= 400){
+		$body = json_decode($result['body'],true);
+		//get a boatload of debug data
+		$info['code'] = $result['code'];
+		$info['version'] = $body['version'];
+		$info['status'] = $body['status'];
+		$info['error_type'] = $body['error_type'];
+		$info['message'] = $body['message'];
+		$info['headers'] = $result['headers'];
+		$info['request'] = $result['request'];
+		if (!empty($result['tablename'])){$info['tablename'] = $result['tablename'];}
+		$info['method'] =  $requestMethod;
+    	//chuck exception
+		$factualE = new FactualApiException($info);
 		throw $factualE;
 	}
+    	return $result;
   }
   
   //The following methods are included as handy convenience; unsupported and experimental
