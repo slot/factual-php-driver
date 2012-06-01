@@ -211,6 +211,14 @@ class Factual {
     	return $result;
   }
   
+  /**
+   * Gets driver version
+   * @return string
+   */
+  public function version(){
+  	return $this->config['factual']['driverversion'];
+  }  
+  
   //The following methods are included as handy convenience; unsupported and experimental
   //They rely on a loosely-coupled third-party service that can be easily swapped out
   
