@@ -9,12 +9,13 @@
  * @license Apache 2.0
  */
 class FactualApiException extends Exception {
-	protected $info; //string
+	protected $info; //debug array
+	protected $helpUrl = "https://github.com/Factual/factual-php-driver#help-debugging--testing";
 
 	public function __construct($info) {
 		$this->info = $info;
 		$this->message = $info['message']." Details:\n".print_r($info,true)."\n use FactualApiException::debug()" .
-				" to obtain this information programatically. See https://github.com/Factual/factual-php-driver#where-to-get-help" .
+				" to obtain this information programatically. See ". $this->helpUrl.
 				" for information on submitting bugs and questions.\n\n";
 	}
 
