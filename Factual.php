@@ -171,8 +171,8 @@ class Factual {
 	 * @return string JSON reponse
 	 */
   public function rawGet($urlStr){
-  	return $this->request($urlStr);
-  	//return $res['body'];
+  	$res = $this->request($urlStr);
+  	return $res['body'];
   }
 
 	/**
