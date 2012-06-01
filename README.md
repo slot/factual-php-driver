@@ -492,7 +492,7 @@ The schema endpoint returns table metadata:
 	print_r($res->getColumnSchemas());
 
 
-#Debugging & Testing
+#Help, Debugging & Testing
 
 ##Exception Handling
 If Factual's API indicates an error, a <tt>FactualApiException</tt> unchecked Exception will be thrown. It contains every possible details about the request you sent and the error that Factual returned.  Example:
