@@ -491,6 +491,73 @@ The schema endpoint returns table metadata:
 	$res = $factual->schema("places");
 	print_r($res->getColumnSchemas());
 
+# Facets
+The driver supports Factual's Facets feature, which returns summary row counts grouped by facets of data (think of this as a combined <tt>count()</tt> and <tt>GROUP BY</tt> function in SQL).  Use Facets to break down the results of your query by count of results. For example, you may want to query all businesses within 1 mile of a location, group those businesses by category, and get a count of each.
+
+## Facets Example
+
+	//Finds the top twenty-five countries containing places with the string 'Starbucks'
+	$query = new FacetQuery("country"); //name the field to facet on in constructor
+	$query->search("starbucks"); //search on 'Starbucks'
+	$query->limit(15); //show no more than 15 results
+	$query->minCountPerFacet(10); //only show countries with more than 10 results
+	$res = $factual->fetch("global", $query); //perform the query
+	print_r($res->getData()); //sump results out as an array
+	
+The response looks like:
+
+	Array
+	(
+	    [country] => Array
+		(
+		    [us] => 11019
+		    [ca] => 902
+		    [gb] => 434
+		    [cn] => 194
+		    [de] => 174
+		    [tw] => 121
+		    [ph] => 78
+		    [au] => 69
+		    [tr] => 68
+		    [id] => 55
+		    [fr] => 47
+		    [sg] => 41
+		    [mx] => 33
+		    [ch] => 31
+		    [hk] => 27
+		)
+	)
+
+
+
+You cannot facet on all fields, only those configured by Factual.  Use the <tt>schema</tt> call to determine the fields for which you can return facets; if the faceted attribute of the schema is <tt>true</tt>, you can facet. 
+
+## Top Level Facets Parameters
+
+<table>
+  <tr>
+    <th>Parameter</th>
+    <th>Description</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td>select</td>
+    <td>Array of comma-delimited string of field names on which facets should be generated, included as the constructor parameter to the FacetQuery.  The response will not necessarily be ordered identically to this list, nor will it reflect any nested relationships between fields.</td>
+    <td><tt>$query = new FacetQuery("region,locality");</tt></td>
+  </tr>
+  <tr>
+    <td>min_count</td>
+    <td>Include only facets that have this minimum count. Must be zero or greater. The default is 1. </td>
+    <td><tt>$query->minCountPerFacet(2)</tt></td>
+  </tr>
+  <tr>
+    <td>limit</td>
+    <td>The maximum number of unique facet values that can be returned for a single field. Range is 1-250. The default is 20.</td>
+    <td><tt>$query->limit(10)</tt></td>
+  </tr>
+</table>  
+
+You can also employ the filters, include count, geo and search parameters like any other Read query.
 
 #Help, Debugging & Testing
 

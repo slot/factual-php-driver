@@ -103,6 +103,9 @@ class Factual {
 	    case "ResolveQuery":
 	        $res = new ResolveResponse($this->request($this->urlForResolve($tableName, $query))); 
 	        break;
+	    case "FacetQuery":
+	        $res = new ReadResponse($this->request($this->urlForFacets($tableName, $query))); 
+	        break;	        
 	    default:
 	    	throw new Exception(__METHOD__." class type '".get_class($query)."' not recognized");
 	    	$res = false;
@@ -149,19 +152,20 @@ class Factual {
     return $this->factHome."t/".$tableName."?".$query->toUrlQuery();
   }
 
-	protected function urlForFacets($tableName, $query)  {
-    	return "t/" . $tableName . "/facets?".$query->toUrlQuery();
+  protected function urlForFacets($tableName, $query)  {
+	return $this->factHome."t/" . $tableName . "/facets?".$query->toUrlQuery();
   }
 
  /*
   protected function urlForGeocode() {
     return "places/geocode";
   }
-
-  protected function urlForGeopulse() {
-    return "places/geopulse";
-  }
 */
+
+  protected function urlForGeopulse($tableName, $query) {
+  	return "places/geopulse?".$query->toUrlQuery();
+  }
+
 
 	/**
 	 * Signs a 'raw' request (a complete query) and returns the JSON results
