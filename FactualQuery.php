@@ -12,12 +12,12 @@
  */
 
 class FactualQuery {
-	private $fullTextSearch; //string
-	private $selectFields = null; //otherwise comma-delineated list of fieldnames
-	private $limit; //int
-	private $offset; //int
-	private $includeRowCount = false; //bool
-	private $circle = null; //need to create this
+	protected $fullTextSearch; //string
+	protected $selectFields = null; //otherwise comma-delineated list of fieldnames
+	protected $limit; //int
+	protected $offset; //int
+	protected $includeRowCount = false; //bool
+	protected $circle = null; //need to create this
 
 	/**
 	 * Whether this lib must perform URL encoding.
@@ -28,13 +28,13 @@ class FactualQuery {
 	/**
 	 * Holds all row filters for this Query. Implicit top-level AND.
 	 */
-	private $rowFilters = array ();
+	protected $rowFilters = array ();
 
 	/**
 	 * Holds all results sorts for this Query. Example contents:
 	 * <tt>"$distance:desc","name:asc","locality:asc"</tt>
 	 */
-	private $sorts = array ();
+	protected $sorts = array ();
 
 	/**
 	 * Sets a full text search query. Factual will use this value to perform a
@@ -229,7 +229,7 @@ class FactualQuery {
 		}
 	}
 
-	private function fieldsJsonOrNull() {
+	protected function fieldsJsonOrNull() {
 		if ($this->selectFields != null) {
 			return $this->selectFields;
 		} else {
@@ -237,7 +237,7 @@ class FactualQuery {
 		}
 	}
 
-	private function sortsJsonOrNull() {
+	protected function sortsJsonOrNull() {
 		if (!empty ($this->sorts)) {
 			return implode(",", $this->sorts);
 		} else {
@@ -245,7 +245,7 @@ class FactualQuery {
 		}
 	}
 
-	private function geoBoundsJsonOrNull() {
+	protected function geoBoundsJsonOrNull() {
 		if ($this->circle != null) {
 			return $this->circle->toJsonStr();
 		} else {
@@ -253,7 +253,7 @@ class FactualQuery {
 		}
 	}
 
-	private function rowFiltersJsonOrNull() {
+	protected function rowFiltersJsonOrNull() {
 		if (empty ($this->rowFilters)) {
 			return null;
 		} else
@@ -276,7 +276,7 @@ class FactualQuery {
 	 * @param array Array of Query filter criteria
 	 * @return obj queries Query object
 	 */
-	private function popFilters($op, array $queries) {
+	protected function popFilters($op, array $queries) {
 		$group = new FilterGroup();
 		$group->op($op);
 		foreach ($queries as $query) {
