@@ -17,7 +17,8 @@ class FactualQuery {
 	protected $limit; //int
 	protected $offset; //int
 	protected $includeRowCount = false; //bool
-	protected $circle = null; //need to create this
+	protected $circle = null; 
+	protected $keyValuePairs = array(); //misc key-value pairs added as additional parameters
 
 	/**
 	 * Whether this lib must perform URL encoding.
@@ -214,11 +215,27 @@ class FactualQuery {
 		$temp['geo'] = $this->geoBoundsJsonOrNull();
 		$temp = array_filter($temp); //remove nulls		
 
-		//encode (cannot use http_build_query() as we need to *raw* encode adn this not provided until v5.4)
+		//encode (cannot use http_build_query() as we need to *raw* encode adn this not provided until PHP v5.4)
 		foreach ($temp as $key => $value){
 			$temp2[] = $key."=".rawurlencode($value);		
 		}	
+		
+		//process additional kay/value parameters
+		foreach ($this->keyValuePairs as $key => $value){
+			$temp2[] = $key."=".rawurlencode($value);	
+		}
+		
 		return implode("&", $temp2);
+	}
+
+	/**
+	 * Adds misc parameters to the URL query
+	 * @param string key Key namev
+	 * @param string un-URL-encoded value 
+	 */
+	public function addParam($key,$value){
+		$this->keyValuePairs[$key] = $value;
+		return $this->keyValuePairs;
 	}
 
 	public function toString() {
