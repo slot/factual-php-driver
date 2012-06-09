@@ -2,14 +2,16 @@
 
 This is the Factual-supported PHP driver for [Factual's public API](http://developer.factual.com).
 
-This API supports queries to Factual's Read, Schema, Crosswalk, and Resolve APIs. Full documentation is available on the Factual website:
+This API supports queries to the entirety of Factual's APIs. Full documentation is available on the Factual website:
 
 *   [Read](http://developer.factual.com/display/docs/Factual+Developer+APIs+Version+3): Search the data
 *   [Schema](http://developer.factual.com/display/docs/Core+API+-+Schema): Get table metadata
 *   [Crosswalk](http://developer.factual.com/display/docs/Places+API+-+Crosswalk): Get third-party IDs
 *   [Resolve](http://developer.factual.com/display/docs/Places+API+-+Resolve): Enrich your data and match it against Factual's
+*   [Facets](http://developer.factual.com/display/docs/Core+API+-+Facets): Group and count entities
+*   [Multi](http://developer.factual.com/display/docs/Core+API+-+Multi): Make multiple queries in a single call
 
-This driver is supported via the [Factual Developer Group](https://groups.google.com/group/factual_developers)
+This driver is supported at [http://support.factual.com/](http://support.factual.com/)
 
 # Dependencies
 PHP5 is required. The php5-curl module is required. SPL is required (for autoloading).
@@ -19,7 +21,6 @@ The package includes [Google's oauth libraries](http://code.google.com/p/oauth-p
 # Overview
 
 ## Basic Design
-
 The driver allows you to create an authenticated handle to Factual. With a Factual handle, you can send queries and get results back. Rockin.
 
 Queries are created using the Query class, which provides a fluent interface to constructing your queries. 
@@ -30,16 +31,15 @@ Results are returned as the JSON returned by Factual but you will likely want to
 The Factual API is a generic API that sits over all tables available via the Factual v3 API. Some popular ones:
 
 *   Table <tt>global</tt> for international places
-*   Table <tt>restaurants-us</tt> for US restaurants only
+*   Table <tt>restaurants-us</tt> for US restaurants
 *   Table <tt>places</tt> for US places only
 
 ## Setup
-
 Obtain an oauth key and secret from Factual, require the file 'Factual.php, and instantiate a <tt>factual</tt> object with the key and secret as parameters'
     
     //setup
     require_once('Factual.php');
-	$factual = new Factual("yourOauthKey","yourOauthSecret");
+$factual = new Factual("yourOauthKey","yourOauthSecret");
 	
 The driver creates an authenticated handle to Factual, and addresses class loading, on instantiation, so be sure to always instantiate a Factual object first.
 
@@ -62,7 +62,6 @@ All of the examples below assume this prior creation of a Factual object.
 	print_r($res->getData());
 
 ## Geo Filters
-
 You can query Factual for entities located within a geographic area. For example:
 
     // Find entities located within 5000 meters of a latitude, longitude
@@ -81,7 +80,6 @@ The above example queries only our US data (our 'places' table).  Be sure to use
 	print_r($res->getData());
 
 ## Results sorting
-
 You can have Factual sort your query results for you, on a field by field basis. Simple example:
 
     // Build a Query to find 10 random entities and sort them by name, ascending:
@@ -103,7 +101,6 @@ You can specify more than one sort, and the results will be sorted with the firs
 	print_r($res->getData());
 
 ## Paging: Limit and Offset
-
 You can use limit and offset to support basic results paging. For example:
 
     // Build a Query with offset of 150, limiting the page size to 10:
@@ -114,7 +111,6 @@ You can use limit and offset to support basic results paging. For example:
 	print_r($res->getData());	
 	
 ## Field Selection
-
 By default your queries will return all fields in the table. You can use the only modifier to specify the exact set of fields returned. For example:
 
     // Build a Query that only gets the name, tel, and category fields:
@@ -156,7 +152,7 @@ To help with debugging, we provide in the response object metadata about the que
 	return $res->getRowCount();
 
 # Read API
-## All Top Level Query Parameters
+## Top Level Query Parameters
 
 <table>
   <tr>
@@ -312,7 +308,6 @@ The driver supports various row filter logic. Examples:
 </table>
 
 ### AND
-
 Queries support logical AND'ing your row filters. For example:
 
     // Build a query to find entities where the name begins with "Coffee" AND the telephone is blank:
@@ -336,7 +331,6 @@ Note that all row filters set at the top level of the Query are implicitly AND'e
 	print_r($res->getData());
 
 ### OR
-
 Queries support logical OR'ing your row filters. For example:
 
     // Build a query to find entities where the name begins with "Coffee" OR the telephone is blank:
@@ -350,7 +344,6 @@ Queries support logical OR'ing your row filters. For example:
 	print_r($res->getData());
 	
 ### Combined ANDs and ORs
-
 You can nest AND and OR logic to whatever level of complexity you need. For example:
 
     // Build a query to find entities where:
@@ -375,8 +368,7 @@ You can nest AND and OR logic to whatever level of complexity you need. For exam
 	print_r($res->getData());
 	
 # Crosswalk
-
-The driver fully support Factual's Crosswalk feature, which lets you "crosswalk" the web and relate entities between Factual's data and that of other web authorities.
+The driver fully support Factual's Crosswalk feature, which lets you "crosswalk" the web and relate entities between Factual's data and that of other web authorities.  See the [API documentation](http://developer.factual.com/display/docs/Places+API+-+Crosswalk) for details.
 
 (See [the Crosswalk Blog](http://blog.factual.com/crosswalk-api) for context.)
 
@@ -445,17 +437,15 @@ NOTE: although these parameters are individually optional, at least one of the f
 	print_r($res->getData());	
           
 # Resolve
-
 The driver fully support Factual's Resolve feature, which lets you start with incomplete data you may have for an entity, and get potential entity matches back from Factual.
 
 Each result record will include a confidence score (<tt>"similarity"</tt>), and a flag indicating whether Factual decided the entity is the correct resolved match with a high degree of accuracy (<tt>"resolved"</tt>).
 
-For any Resolve query, there will be 0 or 1 entities returned with <tt>"resolved"=true</tt>. If there was a full match, it is guaranteed to be the first record in the JSON response.
+For any Resolve query, there will be 0 or 1 entities returned with <tt>"resolved"=true</tt>. If there was a full match, it is guaranteed to be the first record in the JSON response.  See the [API documentation](http://developer.factual.com/display/docs/Places+API+-+Resolve) for details.
 
 (See [the Resolve Blog](http://blog.factual.com/factual-resolve) for more background.)
 
 ## Simple Resolve Examples
-
 Use the common query structure to add known attributes to the query:
 
     // Get all entities that are possibly a match
@@ -486,13 +476,13 @@ Alternatively use the shortcut to return the resolved entity OR null if no resol
 	print_r($res);	
       
 #Schema
-The schema endpoint returns table metadata:    
+The schema endpoint returns table metadata:
   
 	$res = $factual->schema("places");
 	print_r($res->getColumnSchemas());
 
 # Facets
-The driver supports Factual's Facets feature, which returns summary row counts grouped by facets of data (think of this as a combined <tt>count()</tt> and <tt>GROUP BY</tt> function in SQL).  Use Facets to break down the results of your query by count of results. For example, you may want to query all businesses within 1 mile of a location, group those businesses by category, and get a count of each.
+The driver supports Factual's Facets feature, which returns summary row counts grouped by facets of data (think of this as a combined <tt>count()</tt> and <tt>GROUP BY</tt> function in SQL).  Use Facets to break down the results of your query by count of results. For example, you may want to query all businesses within 500m of a location, group those businesses by category, and get a count of each.   See the [API documentation](http://developer.factual.com/display/docs/Core+API+-+Facets) for details.
 
 ## Facets Example
 
