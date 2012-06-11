@@ -14,6 +14,7 @@ class CrosswalkQuery extends FactualQuery {
 	private $_namespace; //string
 	private $namespaceId; //string
 	private $only = array ();
+	const RESPONSETYPE = "CrosswalkResponse";
 
 	/**
 	 * Whether this lib must perform URL encoding.

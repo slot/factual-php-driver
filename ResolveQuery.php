@@ -5,6 +5,7 @@
  * @author Tyler
  */
 class ResolveQuery extends FactualQuery {
+  const RESPONSETYPE = "ResolveResponse";
   private $values = array();
   	/**
 	 * Whether this lib must perform URL encoding.

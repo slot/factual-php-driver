@@ -19,6 +19,7 @@ class FactualQuery {
 	protected $includeRowCount = false; //bool
 	protected $circle = null; 
 	protected $keyValuePairs = array(); //misc key-value pairs added as additional parameters
+	const RESPONSETYPE = "ReadResponse";
 
 	/**
 	 * Whether this lib must perform URL encoding.
@@ -48,6 +49,10 @@ class FactualQuery {
 	public function search($term) {
 		$this->fullTextSearch = $term;
 		return $this;
+	}
+
+	public function getResponseType(){
+		return self::RESPONSETYPE;
 	}
 
 	/**
