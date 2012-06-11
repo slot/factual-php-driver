@@ -492,7 +492,7 @@ The driver supports Factual's Facets feature, which returns summary row counts g
 	$query->limit(15); //show no more than 15 results
 	$query->minCountPerFacet(10); //only show countries with more than 10 results
 	$res = $factual->fetch("global", $query); //perform the query
-	print_r($res->getData()); //sump results out as an array
+	print_r($res->getData()); //dump results out as an array
 	
 The response looks like:
 
@@ -548,6 +548,90 @@ You cannot facet on all fields, only those configured by Factual.  Use the <tt>s
 </table>  
 
 You can also employ the filters, include count, geo and search parameters like any other Read query.
+
+#Multi Queries
+
+The driver fully supports Factual's Multi feature, which enables your making up to three queries on a single http request.  See the [API documentation for details](http://developer.factual.com/display/docs/Core+API+-+Multi).
+
+
+## Simple Multi Example
+Create your query objects as usual, and add them to the query queue using <tt>multiQueue()</tt>:
+
+	//create first query and add to queue
+	$query1 = new FactualQuery;
+	$query1->limit(3);
+	$query1->only("factual_id,name");
+	$factual->multiQueue("global", $query1, "global-places");
+
+	//create second query and add to queue
+	$query2 = new FactualQuery;
+	$query2->limit(3);
+	$query2->only("factual_id,name");
+	$factual->multiQueue("world-geographies", $query2, "world-geos");
+
+
+Note that <tt>multiQueue()</tt> parameters are just like those of the <tt>fetch()</tt> method but include a required third parameter: an arbitrary string that you use to identify the results from each query. 
+
+Use <tt>multiFetch()</tt> to send your request:
+
+	//make multi request
+	$res = $factual->multiFetch();
+
+You can iterate through the response to obtain each response object:
+
+	//iterate through response objects
+	foreach ($res as $queryResponse){
+	    print_r($queryResponse->getData());
+	} 
+
+or use the <tt>getData()</tt> method as a shortcut to see the results of your multiple requests in a single array:
+
+	//dump results as an array
+	print_r($res->getData()); 
+
+The results of this shortcut look like:
+
+	Array
+	(
+	    [global-places] => Array
+		(
+		    [0] => Array
+		        (
+		            [factual_id] => 698ac9a7-4eb1-4bfa-9d0f-b2518a1e59f8
+		            [name] => Solar Devices Inc.
+		        )
+		    [1] => Array
+		        (
+		            [factual_id] => 69fa9b61-ca66-48fe-bb10-8414a6f5c951
+		            [name] => Guanajibo Carburator
+		        )
+		    [2] => Array
+		        (
+		            [factual_id] => 6a778edf-0d07-4de2-8201-32c9f1412a52
+		            [name] => Puerto Rico Sentry Dog
+		        )
+		)
+	    [world-geos] => Array
+		(
+		    [0] => Array
+		        (
+		            [factual_id] => 1185addc-8f76-11e1-848f-cfd5bf3ef515
+		            [name] => Harachandapur
+		        )
+		    [1] => Array
+		        (
+		            [factual_id] => 1185a972-8f76-11e1-848f-cfd5bf3ef515
+		            [name] => Uttar Jadupur
+		        )
+		    [2] => Array
+		        (
+		            [factual_id] => 1179d2fa-8f76-11e1-848f-cfd5bf3ef515
+		            [name] => Bawagempol
+		        )
+		)
+	)
+
+
 
 #Help, Debugging & Testing
 

@@ -20,9 +20,6 @@ abstract class FactualResponse {
   protected $responseHeaders = array();
   protected $responseCode = null;
   protected $request = null;
-  protected $tableTypes = array ( //lookup for table-to-object representation
-		'places' => "FactualPlace"
-  );
 
   /**
    * Constructor, parses return values from CURL in factual::request() 
@@ -45,10 +42,10 @@ abstract class FactualResponse {
 	 */
 	protected function parseResponse($apiResponse){
 		$this->parseJSON($apiResponse['body']);
-		$this->tableName = $apiResponse['tablename'];
+		if (isset($apiResponse['tablename'])){$this->tableName = $apiResponse['tablename'];}
 		$this->responseHeaders = $apiResponse['headers'];
 		$this->responseCode = $apiResponse['code'];
-		$this->request = $apiResponse['request'];
+		if (isset($apiResponse['request'])){$this->request = $apiResponse['request'];}
 	}
 
 	/**
