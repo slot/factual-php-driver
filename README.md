@@ -589,7 +589,7 @@ or use the <tt>getData()</tt> method as a shortcut to see the results of your mu
 	//dump results as an array
 	print_r($res->getData()); 
 
-The results of this shortcut look like:
+The results of the above shortcut look like:
 
 	Array
 	(
@@ -636,7 +636,9 @@ The results of this shortcut look like:
 ##Exception Handling
 If Factual's API indicates an error, a <tt>FactualApiException</tt> unchecked Exception will be thrown. It contains every possible details about the request you sent and the error that Factual returned.  Example:
 
-	PHP Fatal error:  Uncaught exception 'FactualApiException' with message 'Requested resource could not be found. Details:
+	PHP Fatal error:  Uncaught exception 'FactualApiException' with message 
+	'Requested resource could not be found. Details:
+
 	Array
 	(
 	    [code] => 404
@@ -653,8 +655,6 @@ If Factual's API indicates an error, a <tt>FactualApiException</tt> unchecked Ex
 		    [content-length] => 101
 		    [connection] => keep-alive
 		)
-
-	    [request] => http://api.v3.factual.com/t/bglobal
 	    [method] => GET
 	    [query] => http://api.v3.factual.com/t/bglobal
 	)
