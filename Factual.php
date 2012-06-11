@@ -333,7 +333,12 @@ class Factual {
 	 * Called by spl_autoload_register() to avoid conflicts with autoload() methods from other libs
 	 */
 	public static function factualAutoload($className) {
-		include dirname(__FILE__) . "/" . $className . ".php";
+		if (!include  dirname(__FILE__) . "/" . $className . ".php"){
+		 	$msg = "\n------\nAutoload has failed to load class '".$className."'.\n";
+		 	$msg .= "This method will catch improperly loaded classes from other libraries, \n";
+		 	$msg .= "so please be sure the issue lies with the Factual Driver before reporting\n------\n";
+		 	throw new Exception($msg);
+		} 
 	}
 
 }

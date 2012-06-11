@@ -631,8 +631,6 @@ The results of this shortcut look like:
 		)
 	)
 
-
-
 #Help, Debugging & Testing
 
 ##Exception Handling
@@ -680,19 +678,19 @@ If you think you've identified a *specific bug* in this driver, please file an i
   * What you expected to happen & what actually happened
   * Detailed stack trace and/or line numbers
 
-If you are having any other kind of issue, such as unexpected data or strange behaviour from Factual's API (or you're just not sure WTF is going on), please hit us up on [GetSatisfaction](http://support.factual.com/factual), again -- be sure to include the above information.
+If you have a question or are having any other kind of issue, such as unexpected data or strange behaviour from Factual's API (or you're just not sure WTF is going on), please hit us up on [GetSatisfaction](http://support.factual.com/factual), again -- be sure to include the above information.
 
 ## Testing
 Add your secret and key to <tt>test.php</tt> and run on the command line: 'php test.php' ('php -f test.php' on Windows).  This checks your PHP install environment and performs a number of ad-hoc unit tests.
 
 ## Raw Requests
-The driver mainly offer convenence: it signs requests, builds conformant queries, and structures responses. You may however wish to pass a 'raw' query to our API for degugging, testing, or implementing API features not yet codified in the driver:
+The driver mainly offers convenence: it signs requests, builds conformant queries, and structures responses. You may however wish to pass a 'raw' query to our API for degugging, testing, or implementing API features not yet codified in the driver:
 
 	$query = "http://api.v3.factual.com/t/global";
 	print_r($factual->rawGet($query));	
 	exit;
 
-The <tt>rawGet()</tt> method only signs and submits the request; remember to escape your JSON.
+The <tt>rawGet()</tt> method only signs and submits the request; remember to escape your JSON. Responses are raw JSON.
 
 # Geocoding
 Factual does not provide a geocoding service, but we've integrated a third-party Web Service that can easily be swapped out.
