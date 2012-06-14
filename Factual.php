@@ -333,11 +333,14 @@ class Factual {
 	 * Called by spl_autoload_register() to avoid conflicts with autoload() methods from other libs
 	 */
 	public static function factualAutoload($className) {
-		include  dirname(__FILE__) . "/" . $className . ".php";
-		/*
-		 	$msg .= "This method will catch improperly loaded classes from other libraries,";
-		 	$msg .= "so please be sure the issue lies with the Factual Driver before reporting
-		} */
+        $filename = dirname(__FILE__)."/".$className . ".php";
+
+        // don't interfere with other classloaders
+        if(!file_exists($filename)) {
+            return;
+        }
+
+        include $filename;
 	}
 
 }
