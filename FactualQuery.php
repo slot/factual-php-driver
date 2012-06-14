@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 
 
 /**
@@ -303,7 +305,7 @@ class FactualQuery {
 		$group->op($op);
 		foreach ($queries as $query) {
 			if (!$query->rowFilters){ //check to ensure nly filters are combined
-				throw new Exception("Operator ".$op." can be used only to combine row filters");
+				throw new \Exception("Operator ".$op." can be used only to combine row filters");
 				return false;
 			} else {
 				$group->add(array_pop($query->rowFilters));

@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 
 
 /**
@@ -151,7 +153,7 @@ class GeocoderWrapper {
 		$http_response_header = array();
 		@ $result = file_get_contents($endPoint);
 		if (!$result) {
-			throw new Exception(" YQL Error on " . $qString . ": " . $http_response_header[0]);
+			throw new \Exception(" YQL Error on " . $qString . ": " . $http_response_header[0]);
 			return false;
 		}
 		$result = json_decode($result);
@@ -161,7 +163,7 @@ class GeocoderWrapper {
 				//run same query with diagnostics
 				$check = json_decode(file_get_contents($endPoint . "&diagnostics=true"), true); //as array; obj vars w/ dashes fail
 				if ($check['query']['diagnostics']['url']['http-status-code'] == 999) {
-					throw new Exception("YQL error 999: limit appears to have been reached");
+					throw new \Exception("YQL error 999: limit appears to have been reached");
 					return false;
 				}
 			}

@@ -39,7 +39,12 @@ Obtain an oauth key and secret from Factual, require the file 'Factual.php, and 
     
     //setup
     require_once('Factual.php');
-$factual = new Factual("yourOauthKey","yourOauthSecret");
+
+    use Factual\Factual;
+
+    $factual = new Factual("yourOauthKey","yourOauthSecret");
+
+
 	
 The driver creates an authenticated handle to Factual, and addresses class loading, on instantiation, so be sure to always instantiate a Factual object first.
 
@@ -48,6 +53,8 @@ All of the examples below assume this prior creation of a Factual object.
 ## Simple Query Example
 
     // Find 3 random records 
+    use Factual\FactualQuery;
+
     $query = new FactualQuery;
     $query->limit(3);
     $res = $factual->fetch("places", $query);
@@ -56,6 +63,8 @@ All of the examples below assume this prior creation of a Factual object.
 ## Full Text Search Example
 
     // Find entities that match a full text search for Sushi in Santa Monica:
+    use Factual\FactualQuery;
+
     $query = new FactualQuery;
 	$query->search("Sushi Santa Monica");
     $res = $factual->fetch("places", $query);
@@ -65,6 +74,8 @@ All of the examples below assume this prior creation of a Factual object.
 You can query Factual for entities located within a geographic area. For example:
 
     // Find entities located within 5000 meters of a latitude, longitude
+    use Factual\FactualQuery;
+
     $query = new FactualQuery;
 	$query->within(new FactualCircle(34.06018, -118.41835, 5000));
     $res = $factual->fetch("places", $query);
@@ -73,16 +84,23 @@ You can query Factual for entities located within a geographic area. For example
 The above example queries only our US data (our 'places' table).  Be sure to use our 'global' table when querying international or multiple countries.
 
     // Search for 'sushi' in the US and Canada
- 	$query = new FactualQuery;
-	$query->search("Sushi");
-	$query->field("country")->in("US,CA");
+
+    use Factual\FactualQuery;
+
+    $query = new FactualQuery;
+    $query->search("Sushi");
+    $query->field("country")->in("US,CA");
     $res = $factual->fetch("global", $query);
-	print_r($res->getData());
+    print_r($res->getData());
+
 
 ## Results sorting
 You can have Factual sort your query results for you, on a field by field basis. Simple example:
 
     // Build a Query to find 10 random entities and sort them by name, ascending:
+
+    use Factual\FactualQuery;
+
     $query = new FactualQuery;
     $query->limit(10);
     $query->sortAsc("name");
@@ -92,6 +110,9 @@ You can have Factual sort your query results for you, on a field by field basis.
 You can specify more than one sort, and the results will be sorted with the first sort as primary, the second sort or secondary, and so on:
 
     // Build a Query to find 20 random entities, sorted ascending primarily by region, then by locality, then by name:
+
+    use Factual\FactualQuery;
+
 	$query = new FactualQuery;
 	$query->limit(10);
 	$query->sortAsc("region");
@@ -104,6 +125,9 @@ You can specify more than one sort, and the results will be sorted with the firs
 You can use limit and offset to support basic results paging. For example:
 
     // Build a Query with offset of 150, limiting the page size to 10:
+
+    use Factual\FactualQuery;
+
     $query = new FactualQuery;
 	$query->limit(10);
 	$query->offset(150);
@@ -114,6 +138,9 @@ You can use limit and offset to support basic results paging. For example:
 By default your queries will return all fields in the table. You can use the only modifier to specify the exact set of fields returned. For example:
 
     // Build a Query that only gets the name, tel, and category fields:
+
+    use Factual\FactualQuery;
+
 	$query = new FactualQuery;
 	$query->limit(10);    
     $query->only("name,tel,category");
@@ -211,6 +238,9 @@ To help with debugging, we provide in the response object metadata about the que
 The driver supports various row filter logic. Examples:
 
     // Build a query to find places whose name field starts with "Starbucks"
+
+    use Factual\FactualQuery;
+
     $query = new FactualQuery;
     $query->field("name")->beginsWith("Starbucks");
     $res = $factual->fetch("places", $query);
@@ -311,6 +341,9 @@ The driver supports various row filter logic. Examples:
 Queries support logical AND'ing your row filters. For example:
 
     // Build a query to find entities where the name begins with "Coffee" AND the telephone is blank:
+
+    use Factual\FactualQuery;
+
     $query = new FactualQuery;
     $query->_and(
     	array(
@@ -324,6 +357,9 @@ Queries support logical AND'ing your row filters. For example:
 Note that all row filters set at the top level of the Query are implicitly AND'ed together, so you could also do this:
 	
     //Combined query alternative syntax
+
+    use Factual\FactualQuery;
+
     $query = new FactualQuery;
     $query->field("name")->beginsWith("Coffee");
     $query->field("tel")->blank();
@@ -334,6 +370,9 @@ Note that all row filters set at the top level of the Query are implicitly AND'e
 Queries support logical OR'ing your row filters. For example:
 
     // Build a query to find entities where the name begins with "Coffee" OR the telephone is blank:
+
+    use Factual\FactualQuery;
+
     $query = new FactualQuery;
     $query->_or(array(
        	$query->criteria("name")->beginsWith("Coffee"),
@@ -350,6 +389,9 @@ You can nest AND and OR logic to whatever level of complexity you need. For exam
     // (name begins with "Starbucks") OR (name begins with "Coffee")
     // OR
     // (name full text search matches on "tea" AND tel is not blank)
+
+    use Factual\FactualQuery;
+
     $query = new FactualQuery;    
     $query->_or(array(
         $query->_or(array(
@@ -375,6 +417,9 @@ The driver fully support Factual's Crosswalk feature, which lets you "crosswalk"
 ## Simple Crosswalk Example
 
     // Get all Crosswalk data for a specific Places entity, using its Factual ID:
+
+    use Factual\CrosswalkQuery;
+
 	$query = new CrosswalkQuery();
 	$query->factualId("97598010-433f-4946-8fd5-4a6dd1639d77");	 
 	$res = $factual->fetch("places", $query);
@@ -423,6 +468,9 @@ NOTE: although these parameters are individually optional, at least one of the f
 ## More Crosswalk Examples
 
     // Get Loopt's Crosswalk data for a specific Places entity, using its Factual ID as input:
+
+    use Factual\FactualQuery;
+
 	$query = new CrosswalkQuery();
 	$query->factualId("97598010-433f-4946-8fd5-4a6dd1639d77");
 	$query->only("loopt");
@@ -449,6 +497,9 @@ For any Resolve query, there will be 0 or 1 entities returned with <tt>"resolved
 Use the common query structure to add known attributes to the query:
 
     // Get all entities that are possibly a match
+
+    use Factual\ResolveQuery;
+
 	$query = new ResolveQuery();
 	$query->add("name", "Buena Vista Cigar Club");
 	$query->add("latitude", 34.06);
@@ -487,6 +538,10 @@ The driver supports Factual's Facets feature, which returns summary row counts g
 ## Facets Example
 
 	//Finds the top twenty-five countries containing places with the string 'Starbucks'
+
+
+    use Factual\FacetQuery;
+
 	$query = new FacetQuery("country"); //name the field to facet on in constructor
 	$query->search("starbucks"); //search on 'Starbucks'
 	$query->limit(15); //show no more than 15 results
@@ -558,6 +613,10 @@ The driver fully supports Factual's Multi feature, which enables your making up 
 Create your query objects as usual, and add them to the query queue using <tt>multiQueue()</tt>:
 
 	//create first query and add to queue
+
+
+    use Factual\FactualQuery;
+
 	$query1 = new FactualQuery;
 	$query1->limit(3);
 	$query1->only("factual_id,name");

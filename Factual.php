@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 
 
 /**
@@ -42,7 +44,7 @@ class Factual {
 			'consumer_key' => $key,
 			'consumer_secret' => $secret
 		);
-		$this->signer = OAuthStore :: instance("2Leg", $options);
+		$this->signer = \OAuthStore :: instance("2Leg", $options);
 		//register autoloader
 		spl_autoload_register(array (
 			get_class(),
@@ -67,8 +69,8 @@ class Factual {
 		if (!$this->config) {
 			try {
 				$this->config = parse_ini_file($this->configPath, true);
-			} catch (Exception $e) {
-				throw new Exception("Failed parsing config file");
+			} catch (\Exception $e) {
+				throw new \Exception("Failed parsing config file");
 			}
 		}
 	}
@@ -115,7 +117,7 @@ class Factual {
 				$res = new ReadResponse($this->request($this->urlForFacets($tableName, $query)));
 				break;
 			default :
-				throw new Exception(__METHOD__ . " class type '" . get_class($query) . "' not recognized");
+				throw new \Exception(__METHOD__ . " class type '" . get_class($query) . "' not recognized");
 				$res = false;
 		}
 		$this->lastTable = $tableName; //assign table name to object for logging
@@ -143,7 +145,7 @@ class Factual {
 				$res = $this->urlForFacets($tableName, $query);
 				break;
 			default :
-				throw new Exception(__METHOD__ . " class type '" . get_class($query) . "' not recognized");
+				throw new \Exception(__METHOD__ . " class type '" . get_class($query) . "' not recognized");
 				$res = false;
 		}
 		return $res;
@@ -259,7 +261,7 @@ class Factual {
 			"X-Factual-Lib: " . $this->config['factual']['driverversion']
 		); //custom header
 		// Build request with OAuth request params
-		$request = new OAuthRequester($urlStr, $requestMethod, $params);
+		$request = new \OAuthRequester($urlStr, $requestMethod, $params);
 		//Make request
 		$result = $request->doRequest(0, $customHeaders);
 		$result['request'] = $urlStr; //pass request string onto response
@@ -333,12 +335,20 @@ class Factual {
 	 * Called by spl_autoload_register() to avoid conflicts with autoload() methods from other libs
 	 */
 	public static function factualAutoload($className) {
-		if (!include  dirname(__FILE__) . "/" . $className . ".php"){
-		 	$msg = "\n------\nAutoload has failed to load class '".$className."'.\n";
-		 	$msg .= "This method will catch improperly loaded classes from other libraries, \n";
-		 	$msg .= "so please be sure the issue lies with the Factual Driver before reporting\n------\n";
-		 	throw new Exception($msg);
-		} 
+
+        // don't interfere with other classloaders
+        if (0 !== strpos($className, 'Factual\\'))
+        {
+            return;
+        }
+
+        $filename = str_replace('Factual\\', '', $className) . '.php';
+
+        if (!file_exists($filename)) {
+            return;
+        }
+
+        require $filename;
 	}
 
 }

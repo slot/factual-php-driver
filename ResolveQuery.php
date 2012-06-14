@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 /**
  * Represents a Factual Resolve query.
  * This is a refactoring of the Factual Driver by Aaron: https://github.com/Factual/factual-java-driver
@@ -37,8 +39,8 @@ class ResolveQuery extends FactualQuery {
   private function toJsonStr($var) {
     try {
       return json_encode($this->values);
-    } catch (Exception $e) {
-      throw new Exception($e);
+    } catch (\Exception $e) {
+      throw new \Exception($e);
     } 
   }
 
@@ -50,7 +52,7 @@ class ResolveQuery extends FactualQuery {
 				} else {
 					return $name."=".$val;
 				}
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				throw $e;
 			}
 		} else {

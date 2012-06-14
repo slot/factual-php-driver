@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 
 /**
  * Represents the response from running a fetch request against Factual, such as
@@ -28,9 +30,9 @@ class MultiResponse extends ArrayIterator {
     	$this->json = $apiResponse['body'];
     	$this->responseTypes = $responseTypes; //pass response types from query
     	$this->parseResponse($apiResponse);
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
     	//add note about json encoding borking here
-      throw $e ();
+      throw $e;
     }
   }
 
@@ -49,7 +51,8 @@ class MultiResponse extends ArrayIterator {
 			$this->responses[$idx] = json_encode($response); //get separate reponse component		
 			$singleResponse['body'] = $this->responses[$idx];
 			//$responseObject = new $this->responseTypes[$i]($singleResponse);
-			$this->append(new $this->responseTypes[$i]($singleResponse)); //add response object to iterator
+            $className= $this->responseTypes[$i];
+			$this->append(new $className($singleResponse)); //add response object to iterator
 			$i++;
 		}
 		$this->parseJSON($rootJSON);

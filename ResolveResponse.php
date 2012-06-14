@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 
 /**
  * Represents the response from running a fetch request against Factual, such as

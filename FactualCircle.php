@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 
 /**
  * Represents a geographic sub query confining results to a circle.
@@ -20,7 +22,7 @@ class FactualCircle {
 	 */
 	public function __construct($lat, $lon, $meters) {
 		if (!is_numeric($lat) || !is_numeric($lon)){
-			throw new Exception("Cannot create FactualCircle: bad lat/lon parameters: lat='".$lat."',lon='".$lon."'");
+			throw new \Exception("Cannot create FactualCircle: bad lat/lon parameters: lat='".$lat."',lon='".$lon."'");
 			return false;
 		}
 		$this->lat = $lat;

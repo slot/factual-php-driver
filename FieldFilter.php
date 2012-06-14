@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 
 class FieldFilter implements FactualFilter {
 	

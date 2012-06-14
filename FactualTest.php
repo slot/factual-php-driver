@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 error_reporting(E_ERROR);
 require_once ('Factual.php');
 

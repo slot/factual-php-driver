@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 
 /**
  * Represents a top level Factual facet query. Knows how to represent the facet

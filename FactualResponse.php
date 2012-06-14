@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 /**
  * Represents the basic concept of a response from Factual.
  * This is a refactoring of the Factual Driver by Aaron: https://github.com/Factual/factual-java-driver

@@ -1,4 +1,6 @@
 <?php
+namespace Factual;
+
 
 /**
  * Represents an Exception that happened while communicating with Factual.
@@ -8,7 +10,7 @@
  * @package Factual
  * @license Apache 2.0
  */
-class FactualApiException extends Exception {
+class FactualApiException extends \Exception {
 	protected $info; //debug array
 	protected $helpUrl = "https://github.com/Factual/factual-php-driver#help-debugging--testing";
 
